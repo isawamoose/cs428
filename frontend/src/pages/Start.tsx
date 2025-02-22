@@ -1,0 +1,54 @@
+import { useNavigate } from "react-router-dom";
+import "./Start.css";
+import dog_collar from "../assets/dc.png";
+import paw from "../assets/wp.png";
+
+const Start = () => {
+  const navigate = useNavigate();
+
+  const handleStart = (action: string) => {
+    if (action === "login") {
+      navigate("/login"); // Navigate to login page
+    } else if (action === "register") {
+      navigate("/register"); // Navigate to register page
+    }
+  };
+
+  return (
+    <div className="container">
+      <div className="image-container">
+        <img src={paw} alt="Image description" className="pawTop" />
+      </div>
+
+      <h1 className="title">Puppr</h1>
+      <h2 className="slogan">The Place for Pups</h2>
+
+      <div className="image-container">
+        <img src={paw} alt="Image description" className="pawBottom" />
+      </div>
+
+      <div className="image-container-collar">
+        <img src={dog_collar} alt="Image description" className="image" />
+      </div>
+
+      <div className="button-container">
+        <button
+          type="button"
+          className="reg_button"
+          onClick={() => handleStart("register")}
+        >
+          Create An Account
+        </button>
+        <button
+          type="button"
+          className="login_button"
+          onClick={() => handleStart("login")}
+        >
+          Sign In
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Start;

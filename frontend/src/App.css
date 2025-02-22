@@ -1,42 +1,40 @@
 #root {
   max-width: 1280px;
+}
+
+/* Default Styles (for larger screens) */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Input fields and buttons */
+input,
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Make form more compact for smaller screens */
+form {
+  max-width: 400px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 20px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Media query for mobile screens (up to 600px) */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  input,
+  button {
+    font-size: 1rem; /* Adjust font size for smaller screens */
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  form {
+    max-width: 100%; /* Make form take up full width on mobile */
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
