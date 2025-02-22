@@ -1,9 +1,4 @@
 body {
-  background: linear-gradient(
-    to bottom,
-    #03c0ff,
-    #038eff
-  ); /* Light blue to dark blue */
   display: flex; /* Use flexbox to center everything inside the body */
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
@@ -11,13 +6,7 @@ body {
 }
 
 .container {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: flex-start; /* Align the content at the top */
-  align-items: center; /* Center the content horizontally */
-  min-height: 100vh; /* Ensure the container takes up the full viewport height */
-  width: 100%; /* Ensure it takes the full width of the viewport */
-  margin-top: 7.5em;
+  margin-top: 12vh;
 }
 
 .background-images {
@@ -92,5 +81,5 @@ button {
 }
 
 .button-container {
-  margin-top: 1.25rem;
+  margin-top: 2em;
 }

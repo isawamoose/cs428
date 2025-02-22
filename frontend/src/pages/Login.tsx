@@ -18,7 +18,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-page">
       <h2>Login</h2>
       <form onSubmit={(e) => e.preventDefault()}>
         <div>
@@ -39,8 +39,11 @@ const Login = () => {
             placeholder="Enter password"
           />
         </div>
-        <button type="button" onClick={handleLogin}>
+        <button className="login-submit reg_button" type="button" onClick={handleLogin}>
           Login
+        </button>
+        <button className="secondary-option" onClick={() => navigate('/register')}>
+          Create Account
         </button>
       </form>
     </div>
