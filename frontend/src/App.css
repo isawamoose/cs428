@@ -1,40 +1,83 @@
+/* 
+  App.css defines reusable stylies for elements such as
+    - containers
+    - buttons
+    - forms & inputs
+    - layouts
+    - etc.
+  Other component-specific css files are to be used for non-reusable styles, or styles specific to a certain component.
+*/
+
 #root {
   max-width: 1280px;
 }
 
-/* Default Styles (for larger screens) */
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 1em;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: flex-start; /* Align the content at the top */
+  align-items: center; /* Center the content horizontally */
+  min-height: 100vh; /* Ensure the container takes up the full viewport height */
+  width: 100%; /* Ensure it takes the full width of the viewport */
 }
 
 /* Input fields and buttons */
-input,
 button {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+input {
+  width: calc(100%-20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0px 4px 5px #00000033;
 }
 
 /* Make form more compact for smaller screens */
 form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  min-width: 100%;
   max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Media query for mobile screens (up to 600px) */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-
-  input,
-  button {
-    font-size: 1rem; /* Adjust font size for smaller screens */
-  }
-
+/* @media (max-width: 600px) {
   form {
-    max-width: 100%; /* Make form take up full width on mobile */
+    max-width: 100%;
   }
-}
+} */
