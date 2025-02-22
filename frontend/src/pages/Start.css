@@ -1,0 +1,74 @@
+body {
+  background: linear-gradient(
+    to bottom,
+    #03c0ff,
+    #038eff
+  ); /* Light blue to dark blue */
+  display: flex; /* Use flexbox to center everything inside the body */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: flex-start; /* Align the content at the top */
+  align-items: center; /* Center the content horizontally */
+  min-height: 100vh; /* Ensure the container takes up the full viewport height */
+  width: 100%; /* Ensure it takes the full width of the viewport */
+}
+
+.image-container .pawTop {
+  margin-left: 22rem;
+  margin-top: 4rem; /* Adjust margin to push the title upwards */
+  transform: rotate(-20deg);
+  width: 8%;
+  height: auto;
+}
+
+.image-container .pawBottom {
+  margin-left: 5rem;
+  transform: rotate(20deg);
+  width: 15%;
+  height: auto;
+  margin-bottom: 7rem;
+}
+
+.title {
+  color: white;
+  text-align: center;
+  font-size: 4rem;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.slogan {
+  text-align: center;
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+button {
+  display: block;
+  margin-top: 0;
+}
+
+.reg_button {
+  background-color: #03c0ff;
+  color: white;
+  padding: 1rem 6rem;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.login_button {
+  background-color: transparent;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.button-container {
+  margin-top: 1.25rem;
+}
