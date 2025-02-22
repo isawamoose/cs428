@@ -7,6 +7,7 @@ body {
   display: flex; /* Use flexbox to center everything inside the body */
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
+  overflow: hidden;
 }
 
 .container {
@@ -16,25 +17,46 @@ body {
   align-items: center; /* Center the content horizontally */
   min-height: 100vh; /* Ensure the container takes up the full viewport height */
   width: 100%; /* Ensure it takes the full width of the viewport */
+  margin-top: 7.5em;
 }
 
-.image-container .pawTop {
-  margin-left: 22rem;
-  margin-top: 4rem; /* Adjust margin to push the title upwards */
-  transform: rotate(-20deg);
+.background-images {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.background-images img {
+  position: absolute;
+}
+
+.pawTop {
   width: 8%;
-  height: auto;
+  transform: rotate(-20deg);
+  right: 3em;
+  top: 4.5em;
 }
 
-.image-container .pawBottom {
-  margin-left: 5rem;
-  transform: rotate(20deg);
+.pawBottom {
   width: 15%;
-  height: auto;
-  margin-bottom: 7rem;
+  transform: rotate(20deg);
+  left: 4em;
+  top: 15em;
 }
 
-.title {
+.image-container-collar {
+  width: 100vw;
+  margin-top: 5em;
+}
+
+.image-container-collar .image {
+  width: 100%;
+}
+
+.title h1 {
   color: white;
   text-align: center;
   font-size: 4rem;
@@ -42,7 +64,7 @@ body {
   margin-bottom: 0;
 }
 
-.slogan {
+.title h2 {
   text-align: center;
   font-size: 1.25rem;
   margin-bottom: 0;

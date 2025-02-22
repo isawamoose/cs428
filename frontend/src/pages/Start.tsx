@@ -16,15 +16,14 @@ const Start = () => {
 
   return (
     <div className="container">
-      <div className="image-container">
+      <div className="background-images">
         <img src={paw} alt="Image description" className="pawTop" />
+        <img src={paw} alt="Image description" className="pawBottom" />
       </div>
 
-      <h1 className="title">Puppr</h1>
-      <h2 className="slogan">The Place for Pups</h2>
-
-      <div className="image-container">
-        <img src={paw} alt="Image description" className="pawBottom" />
+      <div className="title">
+        <h1>Puppr</h1>
+        <h2>The Place for Pups</h2>
       </div>
 
       <div className="image-container-collar">
