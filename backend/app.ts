@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { login } from './controllers/loginController';
+import { login } from './userController';
 
 const app = express();
 
