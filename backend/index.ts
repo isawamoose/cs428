@@ -22,6 +22,11 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Return default message if the path is unknown
+app.use((_req, res) => {
+  res.send('Welcome to Puppr!');
+});
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
