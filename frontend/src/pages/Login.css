@@ -1,0 +1,16 @@
+body {
+	overflow: hidden;
+}
+
+.login-page {
+	width: 60vw
+}
+
+button.login-submit {
+	margin-top: 1em;
+}
+
+button.secondary-option {
+	background-color: transparent;
+	color: white
+}
