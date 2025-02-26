@@ -1,16 +1,86 @@
-body {
-	overflow: hidden;
-}
-
 .login-page {
-	width: 60vw
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
 }
 
-button.login-submit {
-	margin-top: 1em;
+.login-page .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: flex-start; /* Keep content at the top */
 }
 
-button.secondary-option {
-	background-color: transparent;
-	color: white
+.login-page h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.login-page h2 {
+  text-align: center;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.login-page h2.tagline {
+  margin-top: -0.75rem;
+  opacity: 0.7;
+  margin-bottom: 2rem;
+}
+
+.login-page .login-features {
+  width: 70vw;
+}
+
+.login-page input {
+  background-color: white;
+  border-radius: 7px;
+  padding: 1rem;
+  color: black;
+}
+
+.login-page input::placeholder {
+  opacity: 0.5;
+}
+
+.login-page button.login-submit {
+  margin-top: 1em;
+}
+
+.login-page button.login-submit.reg_button {
+  font-size: 1.25rem;
+  padding: 0.65rem 1rem;
+}
+
+.login-page .background-images {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  pointer-events: none;
+}
+
+.login-page .background-images img {
+  position: absolute;
+}
+
+.login-page .paws {
+  top: 50%;
+  left: -10%;
+  width: 130%;
+  opacity: 0.5;
+}
+
+.login-page button.secondary-option {
+  background-color: transparent;
+  color: white;
+  font-size: 1.25rem;
+  margin: 3rem;
+}
+
+.login-page button.secondary-option .join-now-text {
+  color: #ffbe00;
+  font-weight: bold;
 }
