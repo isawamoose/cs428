@@ -55,6 +55,7 @@ export class Database {
         }
       } finally {
         connection.end();
+        console.log('Database initialized successfully');
       }
     } catch (err: any) {
       console.error(`Error initializing database: ${err.message}`);
