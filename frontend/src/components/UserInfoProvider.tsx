@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode } from "react";
-import { Profile } from "../../shared/Profile";
-import { AuthToken } from "../../shared/util/AuthToken";
+import { Profile } from "@shared/Profile";
+import { AuthToken } from "@shared/util/AuthToken";
 
 /**
  * Used to store user/profile information to be accessed
