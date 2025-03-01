@@ -15,13 +15,13 @@ const Start = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container start-page">
       <div className="background-images">
         <img src={paw} alt="Image description" className="pawTop" />
         <img src={paw} alt="Image description" className="pawBottom" />
       </div>
 
-      <div className="title">
+      <div className="app-title">
         <h1>Puppr</h1>
         <h2>The Place for Pups</h2>
       </div>
