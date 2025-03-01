@@ -122,7 +122,7 @@ export class Database {
     return rows && rows.affectedRows === 1;
   }
 
-  async addAuthUser(username: string, password: string): Promise<boolean> {
+  async addUserAuth(username: string, password: string): Promise<boolean> {
     // check that the username does not already exist
     let [rows] = await this.executeQuery(
       "check_auth_user",
@@ -142,7 +142,7 @@ export class Database {
     return rows && rows.affectedRows === 1;
   }
 
-  async validateAuthUser(username: String, password: string): Promise<boolean> {
+  async validateUserAuth(username: String, password: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "validate_user",
       "SELECT password FROM auth WHERE username = ?",
@@ -156,7 +156,7 @@ export class Database {
     return passwordMatch;
   }
 
-  async deleteAuthUser(username: string) {
+  async deleteUserAuth(username: string) {
     const [rows] = await this.executeQuery(
       "delete_auth_user",
       "DELETE FROM auth WHERE username = ?",

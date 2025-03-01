@@ -15,7 +15,7 @@ export class UserService {
       return false;
     }
     // Add username and password to auth table
-    const addAuthUserSuccess = await this.db.addAuthUser(
+    const addAuthUserSuccess = await this.db.addUserAuth(
       profile.username,
       password
     );
@@ -27,6 +27,6 @@ export class UserService {
   }
 
   async login(username: string, password: string): Promise<boolean> {
-    return await this.db.validateAuthUser(username, password);
+    return await this.db.validateUserAuth(username, password);
   }
 }
