@@ -8,7 +8,6 @@ const app = express();
 const db = new Database();
 const userService = new UserService(db);
 
-// Middleware to parse JSON request bodies
 app.use(bodyParser.json());
 
 app.post("/register", async (req, res) => {
@@ -41,7 +40,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// POST route to handle login
 app.put("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -55,7 +53,7 @@ app.put("/login", async (req, res) => {
 
 // Return default message if the path is unknown
 app.use((_req, res) => {
-  res.send("Welcome to Puppr!");
+  res.send("Welcome to Puppr! You are attempting to reach an unknown path.");
 });
 
 // Start the server
