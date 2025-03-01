@@ -19,6 +19,10 @@ export class UserService {
       profile.username,
       password
     );
+    if (!addAuthUserSuccess) {
+      // If adding the auth user fails, delete the user profile
+      await this.db.deleteUserProfile(profile.username);
+    }
     return addAuthUserSuccess;
   }
 

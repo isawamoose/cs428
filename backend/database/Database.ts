@@ -28,7 +28,7 @@ export class Database {
       return result as any;
     } catch (err: any) {
       console.error(`Error during ${operation}: ${err.message}`);
-      return false;
+      return [];
     } finally {
       connection.end();
     }
@@ -93,7 +93,7 @@ export class Database {
         user.imageLink,
       ]
     );
-    return rows.affectedRows === 1;
+    return rows && rows.affectedRows === 1;
   }
 
   async updateUserProfile(user: Profile) {
@@ -110,7 +110,7 @@ export class Database {
         user.username,
       ]
     );
-    return rows.affectedRows === 1;
+    return rows && rows.affectedRows === 1;
   }
 
   async deleteUserProfile(username: string) {
@@ -119,7 +119,7 @@ export class Database {
       "DELETE FROM user WHERE username = ?",
       [username]
     );
-    return rows.affectedRows === 1;
+    return rows && rows.affectedRows === 1;
   }
 
   async addAuthUser(username: string, password: string): Promise<boolean> {
@@ -130,15 +130,16 @@ export class Database {
       [username]
     );
     if (rows.length > 0) {
+      console.log("Username already exists");
       return false;
     }
     const hash = await bcrypt.hash(password, 10);
     [rows] = await this.executeQuery(
       "add_auth_user",
-      "INSERT INTO users (username, password) VALUES (?, ?)",
+      "INSERT INTO auth (username, password) VALUES (?, ?)",
       [username, hash]
     );
-    return rows.affectedRows === 1;
+    return rows && rows.affectedRows === 1;
   }
 
   async validateAuthUser(username: String, password: string): Promise<boolean> {
@@ -161,6 +162,6 @@ export class Database {
       "DELETE FROM auth WHERE username = ?",
       [username]
     );
-    return rows.affectedRows === 1;
+    return rows && rows.affectedRows === 1;
   }
 }
