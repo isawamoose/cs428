@@ -16,4 +16,11 @@ export const tableCreateStatements = [
     password VARCHAR(255) NOT NULL,
     FOREIGN KEY (username) REFERENCES user(username)
   )`,
+
+  `CREATE TABLE IF NOT EXISTS token (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    FOREIGN KEY (username) REFERENCES user(username)
+  )`,
 ];
