@@ -55,6 +55,11 @@ export class FakeData {
     return this.fakeUsers;
   }
 
+  public getNextUser(lastUser: Profile | null): Profile {
+    const index = lastUser ? this.fakeUsers.findIndex(user => user == lastUser) + 1 : 0
+    return this.fakeUsers[index % this.fakeUsers.length]
+  }
+
   private static _instance: FakeData;
 
   // Returns the singleton instance.
