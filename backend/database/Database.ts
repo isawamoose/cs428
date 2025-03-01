@@ -1,7 +1,8 @@
-import mysql from 'mysql2/promise';
-import { config } from '../config';
-import { tableCreateStatements } from './dbModel';
-import bcrypt from 'bcrypt';
+import mysql from "mysql2/promise";
+import { config } from "../config";
+import { tableCreateStatements } from "./dbModel";
+import bcrypt from "bcrypt";
+import { Profile } from "../shared/Profile";
 
 export class Database {
   private initialized: Promise<void>;
@@ -15,7 +16,11 @@ export class Database {
     return this._getConnection();
   }
 
-  async executeQuery(operation: string, query: string, params: any[]): Promise<any> {
+  async executeQuery(
+    operation: string,
+    query: string,
+    params: any[]
+  ): Promise<any> {
     let result;
     const connection = await this.getConnection();
     try {
@@ -47,7 +52,9 @@ export class Database {
     try {
       const connection = await this._getConnection(false);
       try {
-        await connection.query(`CREATE DATABASE IF NOT EXISTS ${config.db.database}`);
+        await connection.query(
+          `CREATE DATABASE IF NOT EXISTS ${config.db.database}`
+        );
         await connection.query(`USE ${config.db.database}`);
 
         for (const statement of tableCreateStatements) {
@@ -55,20 +62,105 @@ export class Database {
         }
       } finally {
         connection.end();
-        console.log('Database initialized successfully');
+        console.log("Database initialized successfully");
       }
     } catch (err: any) {
       console.error(`Error initializing database: ${err.message}`);
     }
   }
 
-  async validateExistingUser(username: String, password: string): Promise<boolean> {
-    const [rows] = await this.executeQuery('validate_user', 'SELECT password FROM users WHERE username = ?', [username]);
+  async addUserProfile(user: Profile) {
+    // check that the username does not already exist
+    let [rows] = await this.executeQuery(
+      "check_user",
+      "SELECT * FROM user WHERE username = ?",
+      [user.username]
+    );
+    if (rows.length > 0) {
+      return false;
+    }
+
+    [rows] = await this.executeQuery(
+      "add_user_profile",
+      "INSERT INTO user (username, name, breed, description, contact, ownerName, imageLink) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [
+        user.username,
+        user.name,
+        user.breed,
+        user.description,
+        user.contact,
+        user.ownerName,
+        user.imageLink,
+      ]
+    );
+    return rows.affectedRows === 1;
+  }
+
+  async updateUserProfile(user: Profile) {
+    const [rows] = await this.executeQuery(
+      "update_user_profile",
+      "UPDATE user SET name = ?, breed = ?, description = ?, contact = ?, ownerName = ?, imageLink = ? WHERE username = ?",
+      [
+        user.name,
+        user.breed,
+        user.description,
+        user.contact,
+        user.ownerName,
+        user.imageLink,
+        user.username,
+      ]
+    );
+    return rows.affectedRows === 1;
+  }
+
+  async deleteUserProfile(username: string) {
+    const [rows] = await this.executeQuery(
+      "delete_user_profile",
+      "DELETE FROM user WHERE username = ?",
+      [username]
+    );
+    return rows.affectedRows === 1;
+  }
+
+  async addAuthUser(username: string, password: string): Promise<boolean> {
+    // check that the username does not already exist
+    let [rows] = await this.executeQuery(
+      "check_auth_user",
+      "SELECT * FROM auth WHERE username = ?",
+      [username]
+    );
+    if (rows.length > 0) {
+      return false;
+    }
+    const hash = await bcrypt.hash(password, 10);
+    [rows] = await this.executeQuery(
+      "add_auth_user",
+      "INSERT INTO users (username, password) VALUES (?, ?)",
+      [username, hash]
+    );
+    return rows.affectedRows === 1;
+  }
+
+  async validateAuthUser(username: String, password: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "validate_user",
+      "SELECT password FROM auth WHERE username = ?",
+      [username]
+    );
     if (rows.length === 0) {
       return false;
     }
     const user = rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
     return passwordMatch;
+  }
+
+  async deleteAuthUser(username: string) {
+    const [rows] = await this.executeQuery(
+      "delete_auth_user",
+      "DELETE FROM auth WHERE username = ?",
+      [username]
+    );
+    return rows.affectedRows === 1;
   }
 }
