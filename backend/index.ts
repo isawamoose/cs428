@@ -1,3 +1,4 @@
+import 'tsconfig-paths/register' // necessary to import from '@shared'
 import express from 'express';
 import bodyParser from 'body-parser';
 import { UserService } from './service/userService';

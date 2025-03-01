@@ -1,6 +1,6 @@
-import { FakeData } from '../../shared/util/FakeData';
-import { Profile } from '../../shared/Profile';
-import { AuthToken } from '../../shared/util/AuthToken';
+import { FakeData } from '@shared/util/FakeData';
+import { Profile } from '@shared/Profile';
+import { AuthToken } from '@shared/util/AuthToken';
 
 export class LoginService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
