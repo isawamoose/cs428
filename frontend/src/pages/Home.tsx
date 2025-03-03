@@ -1,12 +1,15 @@
 import { UserInfoContext } from "../components/UserInfoProvider";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LuBone, LuThumbsDown } from 'react-icons/lu'
 import './Home.css';
 import { MatchService } from "../services/MatchService";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { authToken, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
+  const { authToken, currentUser, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
   const [matchService] = useState(new MatchService());
+  const dialogRef = useRef<null | HTMLDialogElement>(null);
+  const navigate = useNavigate();
 
   const getNewUser = async () => {
     const userToDisplay = await matchService.getUnmatchedUser(authToken, displayedUser);
@@ -18,20 +21,44 @@ const Home = () => {
   }, []);
 
   const handleLike = async () => {
-    const isMatch = await matchService.match(authToken, displayedUser!.shortProfile)
+    const isMatch = await matchService.match(authToken, displayedUser!.shortProfile);
     if (isMatch) {
-      console.log("It's a match! Congrats!")
+      dialogRef.current?.showModal();
     }
-    await getNewUser();
+    else {
+      await getNewUser();
+    }
   }
 
   const handleDislike = async () => {
     await getNewUser();
   }
 
+  const closeModal = async () => {
+    dialogRef.current?.close();
+    await getNewUser();
+  }
+
+  const startTalking = () => {
+    dialogRef.current?.close();
+    navigate(`/contact/${displayedUser?.shortProfile.ownerName}`);
+  }
+
   if (displayedUser?.shortProfile) {
     return (
       <div className="container home-page">
+
+        {/* Modal to indicate a mutual match */}
+        <dialog ref={dialogRef} className="match-modal">
+          <h2>It looks like {displayedUser.shortProfile.name} left you a bone too!</h2>
+          <p>Contact {displayedUser.shortProfile.ownerName} to set up a time and place 
+            for {currentUser?.shortProfile.name} and {displayedUser.shortProfile.name} to meet.</p>
+          <div className="modal-button-options">
+            <button className="btn-blue" onClick={startTalking}>Start Talking</button>
+            <button onClick={closeModal}>Close</button>
+          </div>
+        </dialog>
+      
         <div className="match-profile-header">
           <h1 className="match-profile-name">{displayedUser.shortProfile.name}</h1>
           <h3 className="match-profile-breed">{displayedUser.shortProfile.breed}</h3>

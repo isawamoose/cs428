@@ -50,6 +50,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+button.btn-blue {
+  background-color: #038eff;
+  color: white
+}
+
 input {
   width: calc(100%-20px);
   padding: 10px;
