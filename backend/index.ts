@@ -82,15 +82,9 @@ secureApiRouter.get("/profile", async (req, res) => {
   }
   const profile = await userService.getUserProfile(username);
   if (profile) {
-    res.send({
-      username: profile.username,
-      name: profile.name,
-      breed: profile.breed,
-      description: profile.description,
-      contact: profile.contact,
-      ownerName: profile.ownerName,
-      imageLink: profile.imageLink,
-    });
+    res.send(profile);
+  } else {
+    res.status(400).send("Failed to get profile");
   }
 });
 
@@ -101,22 +95,8 @@ secureApiRouter.put("/profile", async (req, res) => {
     res.status(401).send("Unauthorized");
     return;
   }
-  const name = req.body.name;
-  const breed = req.body.breed;
-  const description = req.body.description;
-  const contact = req.body.contact;
-  const ownerName = req.body.ownerName;
-  const imageLink = req.body.imageLink;
-
-  const updatedProfile = new Profile(
-    username,
-    name,
-    breed,
-    description,
-    contact,
-    ownerName,
-    imageLink
-  );
+  const profileObj = req.body.profile;
+  const updatedProfile = Profile.fromObject(profileObj);
 
   const success = await userService.updateUserProfile(updatedProfile);
   if (success) {
