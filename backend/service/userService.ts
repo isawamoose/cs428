@@ -49,8 +49,13 @@ export class UserService {
     return await this.db.getUserProfile(username);
   }
 
-  async updateUserProfile(profile: Profile): Promise<boolean> {
-    // FIXME: requires username from user
+  async updateUserProfile(
+    username: string,
+    profile: Profile
+  ): Promise<boolean> {
+    if (username !== profile.username) {
+      return false;
+    }
     return await this.db.updateUserProfile(profile);
   }
 
