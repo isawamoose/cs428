@@ -1,5 +1,5 @@
-import { FakeData } from "@shared/util/FakeData";
 import { apiClient } from "../api/ApiClient";
+import { Profile } from "@shared/Profile";
 // import { Profile } from "@shared/Profile";
 
 export class LoginService {
@@ -21,9 +21,9 @@ export class LoginService {
   //   }
   // }
 
-  public async register() {
+  public async register(profile: Profile) {
     try {
-      await apiClient.register("password", FakeData.instance.firstUser!);
+      await apiClient.register("password", profile);
     } catch (error: unknown) {
       console.error("Registration failed.", (error as Error).message);
     }
