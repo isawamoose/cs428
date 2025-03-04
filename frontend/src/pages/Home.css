@@ -16,13 +16,13 @@
 
 .match-profile-name {
 	color: #038eff;
-	margin-bottom: 1rem;
+	margin-bottom: .5rem;
 }
 
 .match-profile-breed {
 	color: grey;
 	font-weight: 400;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 }
 
 .match-profile-img-container {
@@ -78,4 +78,33 @@
 	margin: 0;
 	font-size: larger;
 	font-weight: 400;
+}
+
+.match-modal {
+	width: calc(60% - 2rem);
+	border-radius: .5rem;
+	flex-direction: column;
+	align-items: center;
+	padding: 1rem 2rem;
+}
+
+.match-modal[open] {
+	display:flex;
+}
+
+.match-modal > h2 {
+	margin: 0;
+	text-align: center;
+}
+
+.match-modal > p {
+	text-align: center;
+	margin-top: .5rem;
+}
+
+.modal-button-options {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: .5rem;
+	width: 100%
 }
