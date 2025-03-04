@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
-import { Profile } from "./shared/Profile";
+import { Profile } from "@shared/Profile";
 
 declare global {
   namespace Express {
@@ -25,25 +25,9 @@ const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 apiRouter.post("/register", async (req, res) => {
-  const username = req.body.username;
-  const name = req.body.name;
-  const breed = req.body.breed;
-  const description = req.body.description;
-  const contact = req.body.contact;
-  const ownerName = req.body.ownerName;
-  const imageLink = req.body.imageLink;
-
   const password = req.body.password;
-
-  const newProfile = new Profile(
-    username,
-    name,
-    breed,
-    description,
-    contact,
-    ownerName,
-    imageLink
-  );
+  const profileObj = req.body.profile;
+  const newProfile = Profile.fromObject(profileObj);
 
   const success = await userService.register(newProfile, password);
 
@@ -59,7 +43,8 @@ apiRouter.put("/login", async (req, res) => {
   const password = req.body.password;
   const token = await userService.login(username, password);
   if (token) {
-    res.send({ token });
+    res.cookie(AUTH_COOKIE_NAME, token, { secure: true, sameSite: "none" });
+    res.send("Logged in successfully");
   } else {
     res.status(401).send("Invalid username or password");
   }

@@ -2,7 +2,7 @@ import mysql from "mysql2/promise";
 import { config } from "../config";
 import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
-import { Profile } from "../shared/Profile";
+import { Profile } from "@shared/Profile";
 
 export class Database {
   private initialized: Promise<void>;
