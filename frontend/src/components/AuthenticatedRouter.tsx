@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { LoginService } from "../services/LoginService";
 import { UserInfoContext } from "../components/UserInfoProvider";
 import { useContext } from "react";
+import Navbar from "./Navbar";
 
 const AuthRouter = () => {
 
@@ -30,6 +31,7 @@ const AuthRouter = () => {
 			<Routes>
 				<Route path='/' element={<Home />}/>
 			</Routes>
+			<Navbar />
 		</div>
 	);
 } 

@@ -80,6 +80,22 @@ form > div {
   flex-direction: column;
 }
 
+.app-navbar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background: linear-gradient(
+    to bottom,
+    #03c0ff,
+    #038eff
+  );
+  height: 4rem;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 2rem;
+  padding-bottom: 1rem;
+}
+
 /* Media query for mobile screens (up to 600px) */
 /* @media (max-width: 600px) {
   form {
