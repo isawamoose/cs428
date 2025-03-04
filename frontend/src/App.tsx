@@ -4,13 +4,13 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Home from "./pages/Home";
 import Start from "./pages/Start";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 
 import "./App.css";
 import UserInfoProvider from "./components/UserInfoProvider";
+import AuthRouter from "./components/AuthenticatedRouter";
 
 function App() {
   return (
@@ -21,9 +21,11 @@ function App() {
           <Route path="/" element={<Start />} />
 
           {/* These pages are always accessible */}
-          <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+
+          {/* Defer to authenticated router */}
+          <Route path='/app/*' element={<AuthRouter />} />
 
           {/* Redirect to Start if any unknown route */}
           <Route path="*" element={<Navigate to="/" />} />

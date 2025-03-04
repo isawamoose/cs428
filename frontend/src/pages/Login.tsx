@@ -29,7 +29,7 @@ const Login = () => {
       //store profile/user information globally to be acessed in other pages if desired (NEED TO CLEAR LATER IN LOGOUT)
       // updateUserInfo(userProfile, userProfile, authToken);
 
-      navigate("/home");
+      navigate("/app");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {
       alert("Login failed. Invalid username or password");

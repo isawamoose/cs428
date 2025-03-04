@@ -16,11 +16,7 @@ interface UserInfo {
   currentUser: Profile | null;
   displayedUser: Profile | null;
   authToken: AuthToken | null;
-  updateUserInfo: (
-    currentUser: Profile,
-    displayedUser: Profile | null,
-    authToken: AuthToken
-  ) => void;
+  setCurrentUser: (currentUser: Profile) => void;
   clearUserInfo: () => void;
   setDisplayedUser: (user: Profile) => void;
 }
@@ -29,7 +25,7 @@ const defaultUserInfo: UserInfo = {
   currentUser: null,
   displayedUser: null,
   authToken: null,
-  updateUserInfo: () => {},
+  setCurrentUser: () => {},
   clearUserInfo: () => {},
   setDisplayedUser: () => {},
 };
@@ -43,12 +39,8 @@ interface Props {
 
 const UserInfoProvider: React.FC<Props> = ({ children }) => {
   // Save user info and auth token to localStorage
-  const saveToLocalStorage = (
-    currentUser: Profile,
-    authToken: AuthToken
-  ): void => {
+  const saveToLocalStorage = (currentUser: Profile): void => {
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser)); // Serialize and store user profile
-    localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(authToken)); // Serialize and store auth token
   };
 
   // Retrieve user info and auth token from localStorage
@@ -84,20 +76,14 @@ const UserInfoProvider: React.FC<Props> = ({ children }) => {
   });
 
   // Update user info and save it to localStorage
-  const updateUserInfo = (
-    currentUser: Profile,
-    displayedUser: Profile | null,
-    authToken: AuthToken
-  ) => {
+  const setCurrentUser = (currentUser: Profile) => {
     //console.log("Inside updateUserInfo function");
     setUserInfo((prevUserInfo) => ({
       ...prevUserInfo, // Spread previous state to retain methods
-      currentUser,
-      displayedUser,
-      authToken,
+      currentUser
     }));
     // Save the updated user info to localStorage
-    saveToLocalStorage(currentUser, authToken);
+    saveToLocalStorage(currentUser);
   };
 
   // Clear user info from context and localStorage
@@ -124,7 +110,7 @@ const UserInfoProvider: React.FC<Props> = ({ children }) => {
     <UserInfoContext.Provider
       value={{
         ...userInfo,
-        updateUserInfo,
+        setCurrentUser,
         clearUserInfo,
         setDisplayedUser,
       }}

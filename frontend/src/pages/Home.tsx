@@ -52,7 +52,7 @@ const Home = () => {
         <dialog ref={dialogRef} className="match-modal">
           <h2>It looks like {displayedUser.shortProfile.name} left you a bone too!</h2>
           <p>Contact {displayedUser.shortProfile.ownerName} to set up a time and place 
-            for {currentUser?.shortProfile.name} and {displayedUser.shortProfile.name} to meet.</p>
+            for {currentUser?.shortProfile?.name} and {displayedUser.shortProfile.name} to meet.</p>
           <div className="modal-button-options">
             <button className="btn-blue" onClick={startTalking}>Start Talking</button>
             <button onClick={closeModal}>Close</button>
