@@ -23,7 +23,7 @@ export class FakeData {
   //Put as many fake users as we need here
   private readonly fakeUsers: Profile[] = [
     new Profile(
-      123456789,
+      "scout",
       "Scout",
       "French Bull Dog",
       "Freindly, and playful little pup",
@@ -32,7 +32,7 @@ export class FakeData {
       FRENCH_BULL
     ),
     new Profile(
-      987654321,
+      "momo",
       "Momo",
       "Shiba Inu",
       "Energetic and friendly dogs",
@@ -41,7 +41,7 @@ export class FakeData {
       SHIBA_INU
     ),
     new Profile(
-      123459876,
+      "lucky",
       "Lucky",
       "Weslh Corgi",
       "Relaxed and quiet dogs",
@@ -56,8 +56,10 @@ export class FakeData {
   }
 
   public getNextUser(lastUser: Profile | null): Profile {
-    const index = lastUser ? this.fakeUsers.findIndex(user => user == lastUser) + 1 : 0
-    return this.fakeUsers[index % this.fakeUsers.length]
+    const index = lastUser
+      ? this.fakeUsers.findIndex((user) => user == lastUser) + 1
+      : 0;
+    return this.fakeUsers[index % this.fakeUsers.length];
   }
 
   private static _instance: FakeData;
