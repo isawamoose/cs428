@@ -1,17 +1,40 @@
-import { FakeData } from '@shared/util/FakeData';
-import { Profile } from '@shared/Profile';
-import { AuthToken } from '@shared/util/AuthToken';
+import { FakeData } from "@shared/util/FakeData";
+import { apiClient } from "../api/ApiClient";
+// import { Profile } from "@shared/Profile";
 
 export class LoginService {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async login(username: string, password: string): Promise<[Profile, AuthToken]> {
-    // TODO: Replace with the result of calling the server
-    const userProfile = FakeData.instance.firstUser; // for now get the first of the fake users to use for login
-
-    if (userProfile === null) {
-      throw new Error('Invalid alias or password');
+  public async login(username: string, password: string) {
+    try {
+      await apiClient.login(username, password);
+      const profile = await apiClient.getProfile();
+      console.log("profile", profile);
+    } catch (error: unknown) {
+      console.error("Login failed.", (error as Error).message);
     }
+  }
 
-    return [userProfile, FakeData.instance.authToken];
+  // public async register(profile: Profile) {
+  //   try {
+  //     await apiClient.register("password", profile!);
+  //   } catch (error: unknown) {
+  //     console.error("Registration failed.", (error as Error).message);
+  //   }
+  // }
+
+  public async register() {
+    try {
+      await apiClient.register("password", FakeData.instance.firstUser!);
+    } catch (error: unknown) {
+      console.error("Registration failed.", (error as Error).message);
+    }
+  }
+
+  public async getProfile() {
+    try {
+      return await apiClient.getProfile();
+    } catch (error: unknown) {
+      console.error("Failed to get profile.", (error as Error).message);
+      return null;
+    }
   }
 }

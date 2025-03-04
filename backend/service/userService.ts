@@ -1,5 +1,5 @@
 import { Database } from "../database/Database";
-import { Profile } from "../shared/Profile";
+import { Profile } from "../../shared/Profile";
 import { v4 as uuidv4 } from "uuid";
 
 export class UserService {
@@ -49,7 +49,13 @@ export class UserService {
     return await this.db.getUserProfile(username);
   }
 
-  async updateUserProfile(profile: Profile): Promise<boolean> {
+  async updateUserProfile(
+    username: string,
+    profile: Profile
+  ): Promise<boolean> {
+    if (username !== profile.username) {
+      return false;
+    }
     return await this.db.updateUserProfile(profile);
   }
 
