@@ -6,13 +6,13 @@ import { MatchService } from "../services/MatchService";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { authToken, currentUser, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
+  const { currentUser, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
   const [matchService] = useState(new MatchService());
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
   const getNewUser = async () => {
-    const userToDisplay = await matchService.getUnmatchedUser(authToken, displayedUser);
+    const userToDisplay = await matchService.getUnmatchedUser(displayedUser);
     setDisplayedUser(userToDisplay);
   }
 
@@ -21,7 +21,7 @@ const Home = () => {
   }, []);
 
   const handleLike = async () => {
-    const isMatch = await matchService.match(authToken, displayedUser!.shortProfile);
+    const isMatch = await matchService.match(displayedUser!.shortProfile);
     if (isMatch) {
       dialogRef.current?.showModal();
     }
