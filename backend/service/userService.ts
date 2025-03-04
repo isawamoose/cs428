@@ -1,5 +1,5 @@
 import { Database } from "../database/Database";
-import { Profile } from "@shared/Profile";
+import { Profile } from "../../shared/Profile";
 import { v4 as uuidv4 } from "uuid";
 
 export class UserService {

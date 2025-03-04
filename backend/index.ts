@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
-import { Profile } from "@shared/Profile";
+import { Profile } from "../shared/Profile";
 
 declare global {
   namespace Express {
