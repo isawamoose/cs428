@@ -82,7 +82,7 @@ export class Database {
 
     [rows] = await this.executeQuery(
       "add_user_profile",
-      "INSERT INTO user (email, dogName, breed, description, contact, ownerName, imageLink) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO user (email, dogName, breed, description, ownerName, imageLink) VALUES (?, ?, ?, ?, ?, ?)",
       [
         user.email,
         user.dogName,
@@ -98,7 +98,7 @@ export class Database {
   async updateUserProfile(user: Profile) {
     const [rows] = await this.executeQuery(
       "update_user_profile",
-      "UPDATE user SET dogName = ?, breed = ?, description = ?, contact = ?, ownerName = ?, imageLink = ? WHERE email = ?",
+      "UPDATE user SET dogName = ?, breed = ?, description = ?, ownerName = ?, imageLink = ? WHERE email = ?",
       [
         user.dogName,
         user.breed,
@@ -195,7 +195,7 @@ export class Database {
     return rows && rows.affectedRows === 1;
   }
 
-  async getUserdogNameFromToken(token: string): Promise<string | null> {
+  async getEmailFromToken(token: string): Promise<string | null> {
     const [rows] = await this.executeQuery(
       "get_email_by_token",
       "SELECT email FROM token WHERE token = ?",

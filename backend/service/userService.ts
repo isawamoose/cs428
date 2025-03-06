@@ -15,45 +15,42 @@ export class UserService {
     if (!addUserProfileSuccess) {
       return false;
     }
-    // Add username and password to auth table
+    // Add email and password to auth table
     const addAuthUserSuccess = await this.db.addUserAuth(
-      profile.username,
+      profile.email,
       password
     );
     if (!addAuthUserSuccess) {
       // If adding the auth user fails, delete the user profile
-      await this.db.deleteUserProfile(profile.username);
+      await this.db.deleteUserProfile(profile.email);
     }
     return addAuthUserSuccess;
   }
 
-  async login(username: string, password: string): Promise<string | null> {
-    const isValidUser = await this.db.validateUserAuth(username, password);
+  async login(email: string, password: string): Promise<string | null> {
+    const isValidUser = await this.db.validateUserAuth(email, password);
     if (isValidUser) {
       const token = this.generateToken();
-      await this.db.addToken(username, token);
+      await this.db.addToken(email, token);
       return token;
     }
     return null;
   }
 
-  async logout(username: string): Promise<boolean> {
-    return await this.db.deleteToken(username);
+  async logout(email: string): Promise<boolean> {
+    return await this.db.deleteToken(email);
   }
 
   async getUsernameFromToken(token: string): Promise<string | null> {
-    return await this.db.getUsernameFromToken(token);
+    return await this.db.getEmailFromToken(token);
   }
 
-  async getUserProfile(username: string): Promise<Profile | null> {
-    return await this.db.getUserProfile(username);
+  async getUserProfile(email: string): Promise<Profile | null> {
+    return await this.db.getUserProfile(email);
   }
 
-  async updateUserProfile(
-    username: string,
-    profile: Profile
-  ): Promise<boolean> {
-    if (username !== profile.username) {
+  async updateUserProfile(email: string, profile: Profile): Promise<boolean> {
+    if (email !== profile.email) {
       return false;
     }
     return await this.db.updateUserProfile(profile);

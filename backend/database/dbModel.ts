@@ -1,7 +1,7 @@
 export const tableCreateStatements = [
   `CREATE TABLE IF NOT EXISTS user (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
     dogName VARCHAR(255) NOT NULL,
     breed VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
