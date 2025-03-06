@@ -13,9 +13,11 @@ export class LoginService {
     }
   }
 
-  public async register(profile: Profile) {
+  public async register(newProfile: Profile) {
     try {
-      await apiClient.register("password", profile);
+      await apiClient.register("password", newProfile);
+      const profile = await apiClient.getProfile();
+      console.log("profile", profile);
     } catch (error: unknown) {
       console.error("Registration failed.", (error as Error).message);
     }
