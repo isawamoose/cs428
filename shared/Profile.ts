@@ -1,15 +1,14 @@
 export interface ProfileObject {
-  _username: string;
-  _name: string;
+  _email: string;
+  _dogName: string;
   _breed: string;
   _description: string;
-  _contact: string;
   _ownerName: string;
   _imageLink: string;
 }
 
 export interface ShortProfile {
-  name: string;
+  dogName: string;
   breed: string;
   description: string;
   ownerName: string;
@@ -17,44 +16,41 @@ export interface ShortProfile {
 }
 
 export interface MatchProfile {
-  name: string;
-  contact: string;
+  dogName: string;
+  email: string;
   imageLink: string;
 }
 
 export class Profile {
-  private _username: string;
-  private _name: string;
+  private _email: string;
+  private _dogName: string;
   private _breed: string;
   private _description: string;
-  private _contact: string;
   private _ownerName: string;
   private _imageLink: string;
 
   constructor(
-    username: string,
-    name: string,
+    email: string,
+    dogName: string,
     breed: string,
     description: string,
-    contact: string,
     ownerName: string,
     imageLink: string
   ) {
-    this._username = username;
-    this._name = name;
+    this._email = email;
+    this._dogName = dogName;
     this._breed = breed;
     this._description = description;
-    this._contact = contact;
     this._ownerName = ownerName;
     this._imageLink = imageLink;
   }
 
-  get username(): string {
-    return this._username;
+  get email(): string {
+    return this._email;
   }
 
-  get name(): string {
-    return this._name;
+  get dogName(): string {
+    return this._dogName;
   }
 
   get breed(): string {
@@ -63,10 +59,6 @@ export class Profile {
 
   get description(): string {
     return this._description;
-  }
-
-  get contact(): string {
-    return this._contact;
   }
 
   get ownerName(): string {
@@ -79,7 +71,7 @@ export class Profile {
 
   get shortProfile(): ShortProfile {
     return {
-      name: this.name,
+      dogName: this._dogName,
       breed: this.breed,
       description: this.description,
       ownerName: this.ownerName,
@@ -89,19 +81,18 @@ export class Profile {
 
   get matchProfile(): MatchProfile {
     return {
-      name: this.name,
-      contact: this.contact,
+      dogName: this.dogName,
+      email: this.email,
       imageLink: this.imageLink,
     };
   }
 
   static fromObject(obj: ProfileObject): Profile {
     return new Profile(
-      obj._username,
-      obj._name,
+      obj._email,
+      obj._dogName,
       obj._breed,
       obj._description,
-      obj._contact,
       obj._ownerName,
       obj._imageLink
     );

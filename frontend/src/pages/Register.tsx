@@ -32,14 +32,13 @@ const Register = () => {
         dogName,
         dogBreed,
         dogTraits.join(", "),
-        email,
         `${ownerFirstName} ${ownerLastName}`,
         dogPhoto || ""
       );
 
       await service.register(newProfile);
 
-      navigate("/home");
+      navigate("/app");
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {

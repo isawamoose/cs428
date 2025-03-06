@@ -3,9 +3,9 @@ import { Profile } from "@shared/Profile";
 // import { Profile } from "@shared/Profile";
 
 export class LoginService {
-  public async login(username: string, password: string) {
+  public async login(email: string, password: string) {
     try {
-      await apiClient.login(username, password);
+      await apiClient.login(email, password);
       const profile = await apiClient.getProfile();
       console.log("profile", profile);
     } catch (error: unknown) {

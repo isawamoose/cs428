@@ -70,11 +70,11 @@ export class Database {
   }
 
   async addUserProfile(user: Profile) {
-    // check that the username does not already exist
+    // check that the email does not already exist
     let [rows] = await this.executeQuery(
       "check_user",
-      "SELECT * FROM user WHERE username = ?",
-      [user.username]
+      "SELECT * FROM user WHERE email = ?",
+      [user.email]
     );
     if (rows.length > 0) {
       return false;
@@ -82,13 +82,12 @@ export class Database {
 
     [rows] = await this.executeQuery(
       "add_user_profile",
-      "INSERT INTO user (username, name, breed, description, contact, ownerName, imageLink) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO user (email, dogName, breed, description, contact, ownerName, imageLink) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
-        user.username,
-        user.name,
+        user.email,
+        user.dogName,
         user.breed,
         user.description,
-        user.contact,
         user.ownerName,
         user.imageLink,
       ]
@@ -99,75 +98,73 @@ export class Database {
   async updateUserProfile(user: Profile) {
     const [rows] = await this.executeQuery(
       "update_user_profile",
-      "UPDATE user SET name = ?, breed = ?, description = ?, contact = ?, ownerName = ?, imageLink = ? WHERE username = ?",
+      "UPDATE user SET dogName = ?, breed = ?, description = ?, contact = ?, ownerName = ?, imageLink = ? WHERE email = ?",
       [
-        user.name,
+        user.dogName,
         user.breed,
         user.description,
-        user.contact,
         user.ownerName,
         user.imageLink,
-        user.username,
+        user.email,
       ]
     );
     return rows && rows.affectedRows === 1;
   }
 
-  async getUserProfile(username: string): Promise<Profile | null> {
+  async getUserProfile(email: string): Promise<Profile | null> {
     const [rows] = await this.executeQuery(
       "get_user_profile",
-      "SELECT * FROM user WHERE username = ?",
-      [username]
+      "SELECT * FROM user WHERE email = ?",
+      [email]
     );
     if (rows.length === 0) {
       return null;
     }
     const user = rows[0];
     return new Profile(
-      user.username,
-      user.name,
+      user.email,
+      user.dogName,
       user.breed,
       user.description,
-      user.contact,
       user.ownerName,
       user.imageLink
     );
   }
 
-  async deleteUserProfile(username: string) {
+  async deleteUserProfile(email: string) {
     const [rows] = await this.executeQuery(
       "delete_user_profile",
-      "DELETE FROM user WHERE username = ?",
-      [username]
+      "DELETE FROM user WHERE email = ?",
+      [email]
     );
     return rows && rows.affectedRows === 1;
   }
 
-  async addUserAuth(username: string, password: string): Promise<boolean> {
-    // check that the username does not already exist
+  async addUserAuth(email: string, password: string): Promise<boolean> {
+    // check that the email does not already exist
     let [rows] = await this.executeQuery(
       "check_auth_user",
-      "SELECT * FROM auth WHERE username = ?",
-      [username]
+      "SELECT * FROM auth WHERE email = ?",
+      [email]
     );
     if (rows.length > 0) {
-      console.log("Username already exists");
+      console.log("UserdogName already exists");
       return false;
     }
     const hash = await bcrypt.hash(password, 10);
     [rows] = await this.executeQuery(
       "add_auth_user",
-      "INSERT INTO auth (username, password) VALUES (?, ?)",
-      [username, hash]
+      "INSERT INTO auth (email, password) VALUES (?, ?)",
+      [email, hash]
     );
     return rows && rows.affectedRows === 1;
   }
 
-  async validateUserAuth(username: String, password: string): Promise<boolean> {
+  async validateUserAuth(email: String, password: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "validate_user",
-      "SELECT password FROM auth WHERE username = ?",
-      [username]
+      "SELECT password FROM auth WHERE email = ?",
+      [email]
     );
     if (rows.length === 0) {
       return false;
@@ -177,44 +174,44 @@ export class Database {
     return passwordMatch;
   }
 
-  async deleteUserAuth(username: string) {
+  async deleteUserAuth(email: string) {
     const [rows] = await this.executeQuery(
       "delete_auth_user",
-      "DELETE FROM auth WHERE username = ?",
-      [username]
+      "DELETE FROM auth WHERE email = ?",
+      [email]
     );
     return rows && rows.affectedRows === 1;
   }
 
-  async addToken(username: string, token: string) {
+  async addToken(email: string, token: string) {
     // replace any existing token for this user
-    await this.deleteToken(username);
+    await this.deleteToken(email);
 
     const [rows] = await this.executeQuery(
       "add_token",
-      "INSERT INTO token (username, token) VALUES (?, ?)",
-      [username, token]
+      "INSERT INTO token (email, token) VALUES (?, ?)",
+      [email, token]
     );
     return rows && rows.affectedRows === 1;
   }
 
-  async getUsernameFromToken(token: string): Promise<string | null> {
+  async getUserdogNameFromToken(token: string): Promise<string | null> {
     const [rows] = await this.executeQuery(
-      "get_username_by_token",
-      "SELECT username FROM token WHERE token = ?",
+      "get_email_by_token",
+      "SELECT email FROM token WHERE token = ?",
       [token]
     );
     if (rows.length === 0) {
       return null;
     }
-    return rows[0].username;
+    return rows[0].email;
   }
 
-  async deleteToken(username: string) {
+  async deleteToken(email: string) {
     const [rows] = await this.executeQuery(
       "delete_token",
-      "DELETE FROM token WHERE username = ?",
-      [username]
+      "DELETE FROM token WHERE email = ?",
+      [email]
     );
     return rows && rows.affectedRows === 1;
   }

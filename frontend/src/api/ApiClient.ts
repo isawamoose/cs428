@@ -3,8 +3,8 @@ import { ApiRequest } from "./Request";
 
 class ApiClient {
   private apiRequest: ApiRequest = new ApiRequest();
-  async login(username: string, password: string): Promise<void> {
-    const body = { username, password };
+  async login(email: string, password: string): Promise<void> {
+    const body = { email, password };
     await this.apiRequest.request("login", "PUT", body);
   }
 

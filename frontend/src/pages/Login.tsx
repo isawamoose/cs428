@@ -8,22 +8,22 @@ import "./Login.css";
 import { LoginService } from "../services/LoginService";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   // const { updateUserInfo } = useContext(UserInfoContext);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      alert("Please enter both username and password.");
+    if (!email || !password) {
+      alert("Please enter both email and password.");
       return;
     }
 
     try {
       const service = new LoginService();
-      // const [userProfile, authToken] = await service.login(username, password);
-      await service.login(username, password);
+      // const [userProfile, authToken] = await service.login(email, password);
+      await service.login(email, password);
       //console.log("User Info:", userProfile.shortProfile); // testing login service
 
       //store profile/user information globally to be acessed in other pages if desired (NEED TO CLEAR LATER IN LOGOUT)
@@ -32,7 +32,7 @@ const Login = () => {
       navigate("/app");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {
-      alert("Login failed. Invalid username or password");
+      alert("Login failed. Invalid email or password");
     }
   };
 
@@ -48,9 +48,9 @@ const Login = () => {
             <div>
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email"
               />
             </div>
             <div>
