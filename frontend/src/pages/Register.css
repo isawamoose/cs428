@@ -1,0 +1,218 @@
+.register-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.register-page .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: flex-start; /* Keep content at the top */
+}
+
+.register-page h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.register-page h2 {
+  text-align: center;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.register-page h2.tagline {
+  margin-top: -0.75rem;
+  opacity: 0.7;
+  margin-bottom: 2rem;
+}
+
+.register-page .register-features {
+  width: 70vw;
+}
+
+.register-page input {
+  background-color: white;
+  border-radius: 7px;
+  padding: 1rem;
+  color: black;
+}
+
+.register-page input::placeholder {
+  opacity: 0.5;
+}
+
+.register-page button.register-submit.reg_button {
+  background-color: #03c0ff;
+  margin-top: 1em;
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  padding: 0.65rem 1rem;
+}
+
+.register-page button.register-submit.reg_button:disabled {
+  background-color: grey;
+  opacity: 0.5;
+}
+
+.register-page button.register-submit.back_button {
+  margin-top: 1em;
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  color: white;
+  background-color: #e65565;
+}
+
+.register-page button.register-submit.curr_loc_button {
+  background-color: #03c0ff;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+  font-size: 1.25rem;
+}
+
+.register-page .solid-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  width: 100%; /* Ensure the divider takes up full width */
+}
+
+.register-page .solid-divider .line {
+  width: 100%; /* Adjust the width of the line */
+  height: 2px;
+  background-color: white;
+  margin-bottom: 0.5rem; /* Add some space between the line and text */
+}
+
+.register-page .solid-divider span {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.register-page select {
+  background-color: white;
+  color: black;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.register-page .add-trait {
+  background-color: #ffbe00;
+}
+
+.register-page .add-trait:disabled {
+  opacity: 0.5;
+}
+
+.register-page .trait-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+  display: flex; /* Keeps items in a row */
+  flex-wrap: wrap; /* Wraps to the next line if too long */
+  gap: 0.5rem; /* Adds spacing between traits */
+}
+
+.register-page .trait-item {
+  background-color: transparent;
+  padding: 0.25rem 1rem;
+  border-radius: 10px;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+  height: 2rem;
+}
+
+.register-page .trait-item .remove-trait {
+  margin: 0.55rem;
+  padding: 0;
+  background-color: transparent;
+  font-size: 1rem;
+  color: red;
+}
+
+.register-page .file-input-label {
+  display: inline-block;
+  width: 75vw;
+  height: 75vw;
+  background-color: #81d0ff;
+  border-radius: 50%;
+  border: 4px solid #ffbe00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  pointer-events: auto; /* Make sure the label is still clickable */
+}
+
+.register-page .camera-icon {
+  width: 50%;
+  height: 50%;
+}
+
+.register-page .profile-preview {
+  position: absolute;
+  top: 2;
+  left: 2;
+  width: 75vw;
+  height: 75vw;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ffbe00;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.registration-complete-container {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: flex-start; /* Align items to the top */
+  align-items: center; /* Center horizontally */
+  text-align: center; /* Center text */
+  padding-top: 2rem; /* Optional: add some padding to move the content a bit down from the top */
+}
+
+.check-icon {
+  width: 15rem; /* Optional: adjust icon size */
+  height: 15rem; /* Optional: adjust icon size */
+  margin-bottom: 1rem; /* Space between icon and text */
+}
+
+.register-page .background-images {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.register-page .background-images img {
+  position: absolute;
+}
+
+.register-page .paws {
+  top: 50%;
+  left: -10%;
+  width: 130%;
+  opacity: 0.5;
+}
+
+.register-page button.secondary-option {
+  background-color: transparent;
+  color: white;
+  font-size: 1.25rem;
+  margin: 3rem;
+}
+
+.register-page button.secondary-option .join-now-text {
+  color: #ffbe00;
+  font-weight: bold;
+}
