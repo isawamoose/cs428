@@ -1,6 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
 import { Profile } from "@shared/Profile";
-import { AuthToken } from "@shared/util/AuthToken";
 
 /**
  * Used to store user/profile information to be accessed
@@ -9,18 +8,12 @@ import { AuthToken } from "@shared/util/AuthToken";
 
 // Constants for localStorage keys
 const CURRENT_USER_KEY = "CurrentUserKey";
-const AUTH_TOKEN_KEY = "AuthTokenKey";
 
 // Define the structure of user information in the context
 interface UserInfo {
   currentUser: Profile | null;
   displayedUser: Profile | null;
-  authToken: AuthToken | null;
-  updateUserInfo: (
-    currentUser: Profile,
-    displayedUser: Profile | null,
-    authToken: AuthToken
-  ) => void;
+  setCurrentUser: (currentUser: Profile) => void;
   clearUserInfo: () => void;
   setDisplayedUser: (user: Profile) => void;
 }
@@ -28,8 +21,7 @@ interface UserInfo {
 const defaultUserInfo: UserInfo = {
   currentUser: null,
   displayedUser: null,
-  authToken: null,
-  updateUserInfo: () => {},
+  setCurrentUser: () => {},
   clearUserInfo: () => {},
   setDisplayedUser: () => {},
 };
@@ -42,39 +34,31 @@ interface Props {
 }
 
 const UserInfoProvider: React.FC<Props> = ({ children }) => {
-  // Save user info and auth token to localStorage
-  const saveToLocalStorage = (
-    currentUser: Profile,
-    authToken: AuthToken
-  ): void => {
+  // Save user info to localStorage
+  const saveToLocalStorage = (currentUser: Profile): void => {
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser)); // Serialize and store user profile
-    localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(authToken)); // Serialize and store auth token
   };
 
-  // Retrieve user info and auth token from localStorage
+  // Retrieve user info from localStorage
   const retrieveFromLocalStorage = (): {
     currentUser: Profile | null;
     displayedUser: Profile | null;
-    authToken: AuthToken | null;
   } => {
     const loggedInUser = localStorage.getItem(CURRENT_USER_KEY);
-    const authToken = localStorage.getItem(AUTH_TOKEN_KEY);
 
-    if (loggedInUser && authToken) {
+    if (loggedInUser) {
       return {
         currentUser: JSON.parse(loggedInUser), // Deserialize and return user profile
         displayedUser: JSON.parse(loggedInUser), // Set displayedUser as the logged-in user
-        authToken: JSON.parse(authToken), // Deserialize and return auth token
       };
     } else {
-      return { currentUser: null, displayedUser: null, authToken: null };
+      return { currentUser: null, displayedUser: null };
     }
   };
 
-  // Clear user info and auth token from localStorage
+  // Clear user info from localStorage
   const clearLocalStorage = (): void => {
     localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem(AUTH_TOKEN_KEY);
   };
 
   // Initialize user state from localStorage or default values
@@ -84,20 +68,14 @@ const UserInfoProvider: React.FC<Props> = ({ children }) => {
   });
 
   // Update user info and save it to localStorage
-  const updateUserInfo = (
-    currentUser: Profile,
-    displayedUser: Profile | null,
-    authToken: AuthToken
-  ) => {
+  const setCurrentUser = (currentUser: Profile) => {
     //console.log("Inside updateUserInfo function");
     setUserInfo((prevUserInfo) => ({
       ...prevUserInfo, // Spread previous state to retain methods
-      currentUser,
-      displayedUser,
-      authToken,
+      currentUser
     }));
     // Save the updated user info to localStorage
-    saveToLocalStorage(currentUser, authToken);
+    saveToLocalStorage(currentUser);
   };
 
   // Clear user info from context and localStorage
@@ -106,7 +84,6 @@ const UserInfoProvider: React.FC<Props> = ({ children }) => {
       ...prevUserInfo, // Spread previous state to retain methods
       currentUser: null,
       displayedUser: null,
-      authToken: null,
     }));
     clearLocalStorage(); // Remove data from localStorage
   };
@@ -124,7 +101,7 @@ const UserInfoProvider: React.FC<Props> = ({ children }) => {
     <UserInfoContext.Provider
       value={{
         ...userInfo,
-        updateUserInfo,
+        setCurrentUser,
         clearUserInfo,
         setDisplayedUser,
       }}

@@ -6,13 +6,13 @@ import { MatchService } from "../services/MatchService";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { authToken, currentUser, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
+  const { currentUser, displayedUser, setDisplayedUser } = useContext(UserInfoContext);
   const [matchService] = useState(new MatchService());
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
   const getNewUser = async () => {
-    const userToDisplay = await matchService.getUnmatchedUser(authToken, displayedUser);
+    const userToDisplay = await matchService.getUnmatchedUser(displayedUser);
     setDisplayedUser(userToDisplay);
   }
 
@@ -21,7 +21,7 @@ const Home = () => {
   }, []);
 
   const handleLike = async () => {
-    const isMatch = await matchService.match(authToken, displayedUser!.shortProfile);
+    const isMatch = await matchService.match(displayedUser!.shortProfile);
     if (isMatch) {
       dialogRef.current?.showModal();
     }
@@ -52,7 +52,7 @@ const Home = () => {
         <dialog ref={dialogRef} className="match-modal">
           <h2>It looks like {displayedUser.shortProfile.name} left you a bone too!</h2>
           <p>Contact {displayedUser.shortProfile.ownerName} to set up a time and place 
-            for {currentUser?.shortProfile.name} and {displayedUser.shortProfile.name} to meet.</p>
+            for {currentUser?.shortProfile?.name} and {displayedUser.shortProfile.name} to meet.</p>
           <div className="modal-button-options">
             <button className="btn-blue" onClick={startTalking}>Start Talking</button>
             <button onClick={closeModal}>Close</button>
