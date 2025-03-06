@@ -32,7 +32,15 @@ apiRouter.post("/register", async (req, res) => {
   const success = await userService.register(newProfile, password);
 
   if (success) {
-    res.send("User registered successfully");
+    const token = await userService.login(newProfile.username, password);
+    if (token) {
+      res.cookie(AUTH_COOKIE_NAME, token, { secure: true, sameSite: "none" });
+      res.send("User registered successfully");
+    } else {
+      res
+        .status(400)
+        .send("Registered successfully but failed to log in registered user");
+    }
   } else {
     res.status(400).send("Username already exists");
   }

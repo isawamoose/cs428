@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 import { LoginService } from "../services/LoginService";
+import { Profile } from "@shared/Profile";
 
 const Register = () => {
   const [step, setStep] = useState(1); // Track registration step
@@ -16,24 +17,31 @@ const Register = () => {
   const [dogName, setDogName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [ownersBirthday, setOwnersBirthday] = useState("");
-  const [dogsBirthday, setDogsBirthday] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
   const [dogBreed, setDogBreed] = useState("");
   const [dogTraits, setDogTraits] = useState<string[]>([]);
   const [newTrait, setNewTrait] = useState("");
-  const [dogPhoto, setDogPhoto] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [dogPhoto, setDogPhoto] = useState<string | null>("fakePhotoURL");
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
       const service = new LoginService();
+      const newProfile = new Profile(
+        email,
+        dogName,
+        dogBreed,
+        dogTraits.join(", "),
+        email,
+        `${ownerFirstName} ${ownerLastName}`,
+        dogPhoto || ""
+      );
 
-      await service.register();
+      await service.register(newProfile);
 
       navigate("/home");
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {
       alert("Register failed. Invalid information");
     }
@@ -58,48 +66,13 @@ const Register = () => {
     setDogTraits(dogTraits.filter((_, i) => i !== index)); // Remove trait by index
   };
 
-  const handleUseCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-
-          // Use a reverse geocoding API to fetch the address
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await response.json();
-
-          if (data.address) {
-            setStreet(data.address.road || "");
-            setCity(
-              data.address.city ||
-                data.address.town ||
-                data.address.village ||
-                ""
-            );
-            setZipCode(data.address.postcode || "");
-          }
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          alert(
-            "Failed to retrieve location. Please enter your address manually."
-          );
-        }
-      );
-    } else {
-      alert("Geolocation is not supported by your browser.");
-    }
-  };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setDogPhoto(reader.result as string); // Convert file to base64 URL
-      };
+      // reader.onloadend = () => {
+      //   setDogPhoto(reader.result as string); // Convert file to base64 URL
+      // };
       reader.readAsDataURL(file);
     }
   };
@@ -107,30 +80,43 @@ const Register = () => {
   return (
     <div className="register-page">
       <div className="content">
-        <h1>{step < 8 ? "Let's Get You Started!" : "Complete!"}</h1>
+        <h1>{step < 6 ? "Let's Get You Started!" : "Complete!"}</h1>
         <h2>
           {step === 1
-            ? "Enter You & Your Furry Friend's Name"
-            : step === 2
             ? "Enter Your Email & Password"
+            : step === 2
+            ? "Enter You & Your Dog's Name"
             : step === 3
-            ? "Enter You & Your Furry Friend's Date of Birth"
+            ? "Select Your Dog's Breed"
             : step === 4
-            ? "Enter Your Address"
-            : step === 5
-            ? "What is your dog's breed?"
-            : step === 6
             ? "Add Your Dog’s Personality Traits"
-            : step === 7
+            : step === 5
             ? "Upload Your Dog’s Profile Picture"
             : ""}
         </h2>
-        <h2 className="tagline">{step < 8 ? "Creating your account" : ""}</h2>
+        <h2 className="tagline">{step < 6 ? "Creating your account" : ""}</h2>
 
         <div className="register-features">
           <form onSubmit={(e) => e.preventDefault()}>
-            {/* Step 1: Name Input */}
+            {/* Step 1: Email & Password */}
             {step === 1 && (
+              <>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                />
+              </>
+            )}
+            {/* Step 2: Name Input */}
+            {step === 2 && (
               <>
                 <input
                   type="text"
@@ -152,78 +138,8 @@ const Register = () => {
                 />
               </>
             )}
-
-            {/* Step 2: Email & Password */}
-            {step === 2 && (
-              <>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
-                />
-              </>
-            )}
-
-            {/* Step 3: Date of Birth */}
+            {/* Step 3: Dog Breed */}
             {step === 3 && (
-              <>
-                <input
-                  type="text"
-                  value={ownersBirthday}
-                  onChange={(e) => setOwnersBirthday(e.target.value)}
-                  placeholder="Enter your birthday DD/MM/YYYY"
-                />
-                <input
-                  type="text"
-                  value={dogsBirthday}
-                  onChange={(e) => setDogsBirthday(e.target.value)}
-                  placeholder="Enter dog's birthday DD/MM/YYYY"
-                />
-              </>
-            )}
-            {/* Step 4: Address */}
-            {step === 4 && (
-              <>
-                <button
-                  type="button"
-                  className="register-submit curr_loc_button"
-                  onClick={handleUseCurrentLocation}
-                >
-                  Use Current Location
-                </button>
-                <div className="solid-divider">
-                  <div className="line"></div>
-                  <span>Or Enter Manually</span>
-                </div>
-                <input
-                  type="text"
-                  value={street}
-                  onChange={(e) => setStreet(e.target.value)}
-                  placeholder="Enter Your Street Address"
-                />
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Enter Your City"
-                />
-                <input
-                  type="text"
-                  value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
-                  placeholder="Enter Your ZIP Code"
-                />
-              </>
-            )}
-            {/* Step 5: Dog Breed */}
-            {step === 5 && (
               <select
                 value={dogBreed}
                 onChange={(e) => setDogBreed(e.target.value)}
@@ -241,8 +157,8 @@ const Register = () => {
               </select>
             )}
 
-            {/* Step 6: Dog Personality */}
-            {step === 6 && (
+            {/* Step 4: Dog Personality */}
+            {step === 4 && (
               <>
                 <div className="trait-input-container">
                   <input
@@ -278,8 +194,8 @@ const Register = () => {
               </>
             )}
 
-            {/* Step 7: Dog Profile Picture */}
-            {step === 7 && (
+            {/* Step 5: Dog Profile Picture */}
+            {step === 5 && (
               <>
                 <label htmlFor="file-input" className="file-input-label">
                   <img src={cam} alt="Camera Icon" className="camera-icon" />
@@ -301,8 +217,8 @@ const Register = () => {
               </>
             )}
 
-            {/* Step 8: registration complete */}
-            {step === 8 && (
+            {/* Step 6: registration complete */}
+            {step === 6 && (
               <div className="registration-complete-container">
                 <img src={check} alt="Check Icon" className="check-icon" />
                 <h1>Thank you for signing up.</h1>
@@ -315,26 +231,22 @@ const Register = () => {
                 type="button"
                 className="register-submit reg_button"
                 onClick={() => {
-                  if (step === 8) {
-                    handleRegister(); // Call the register service on step 8
+                  if (step === 6) {
+                    handleRegister(); // Call the register service on step 6
                   } else {
                     handleContinue(); // Handle continue for other steps
                   }
                 }}
                 disabled={
                   step === 1
-                    ? !ownerFirstName || !ownerLastName || !dogName
-                    : step === 2
                     ? !email || !password
+                    : step === 2
+                    ? !ownerFirstName || !ownerLastName || !dogName
                     : step === 3
-                    ? !ownersBirthday || !dogsBirthday
-                    : step === 4
-                    ? !street || !city || !zipCode
-                    : step === 5
                     ? !dogBreed
-                    : step === 6
+                    : step === 4
                     ? dogTraits.length === 0
-                    : step === 7
+                    : step === 5
                     ? !dogPhoto
                     : false
                 }
@@ -343,7 +255,7 @@ const Register = () => {
               </button>
 
               {/* Back Button */}
-              {step >= 2 && step <= 7 && (
+              {step >= 2 && step <= 6 && (
                 <button
                   type="button"
                   className="register-submit back_button"
