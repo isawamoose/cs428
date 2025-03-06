@@ -23,29 +23,26 @@ export class FakeData {
   //Put as many fake users as we need here
   private readonly fakeUsers: Profile[] = [
     new Profile(
-      "scout",
+      "bailey@gmail.com",
       "Scout",
       "French Bull Dog",
       "Freindly, and playful little pup",
-      "bailey@gmail.com",
       "Bailey",
       FRENCH_BULL
     ),
     new Profile(
-      "momo",
+      "jasmine@gmail.com",
       "Momo",
       "Shiba Inu",
       "Energetic and friendly dogs",
-      "jasmine@gmail.com",
       "Jasmine",
       SHIBA_INU
     ),
     new Profile(
-      "lucky",
+      "todd@gmail.com",
       "Lucky",
       "Weslh Corgi",
       "Relaxed and quiet dogs",
-      "todd@gmail.com",
       "Todd",
       WELSH_CORGI
     ),
