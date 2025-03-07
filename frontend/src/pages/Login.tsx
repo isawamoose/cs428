@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { UserInfoContext } from "../components/UserInfoProvider";
-// import { useContext } from "react";
 import paws from "../assets/paws.png";
 
 import "./Login.css";
 import { LoginService } from "../services/LoginService";
+import { Profile } from "@shared/Profile";
 
-const Login = () => {
+interface Props {
+  setUser: (user: Profile) => void;
+}
+
+const Login = (props: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  // const { updateUserInfo } = useContext(UserInfoContext);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -22,13 +23,11 @@ const Login = () => {
 
     try {
       const service = new LoginService();
-      // const [userProfile, authToken] = await service.login(email, password);
-      await service.login(email, password);
-      //console.log("User Info:", userProfile.shortProfile); // testing login service
-
-      //store profile/user information globally to be acessed in other pages if desired (NEED TO CLEAR LATER IN LOGOUT)
-      // updateUserInfo(userProfile, userProfile, authToken);
-
+      const user = await service.login(email, password, props.setUser);
+      if (!user) {
+        alert("Login failed. Invalid email or password");
+        return;
+      }
       navigate("/app");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {
