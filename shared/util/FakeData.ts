@@ -1,5 +1,5 @@
 import { AuthToken } from "./AuthToken";
-import { Profile } from "../Profile";
+import { Profile, ShortProfile } from "../Profile";
 
 //just included images as strings, hopefully this work, if not save images into a shared assets folder I guess
 const FRENCH_BULL: string =
@@ -52,11 +52,16 @@ export class FakeData {
     return this.fakeUsers;
   }
 
-  public getNextUser(lastUser: Profile | null): Profile {
+  public getNextUser(lastUser: Profile | null): ShortProfile {
     const index = lastUser
       ? this.fakeUsers.findIndex((user) => user == lastUser) + 1
       : 0;
-    return this.fakeUsers[index % this.fakeUsers.length];
+    return this.fakeUsers[index % this.fakeUsers.length].shortProfile;
+  }
+
+  public getRandomUser(): ShortProfile {
+    return this.fakeUsers[Math.floor(Math.random() * this.fakeUsers.length)]
+      .shortProfile;
   }
 
   private static _instance: FakeData;

@@ -36,7 +36,7 @@ const Register = () => {
         dogPhoto || ""
       );
 
-      await service.register(newProfile);
+      await service.register(newProfile, password);
 
       navigate("/app");
 

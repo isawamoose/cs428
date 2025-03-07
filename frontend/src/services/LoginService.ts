@@ -7,23 +7,23 @@ export class LoginService {
     try {
       await apiClient.login(email, password);
       const profile = await apiClient.getProfile();
-      console.log("profile", profile);
+      localStorage.setItem("user", JSON.stringify(profile));
     } catch (error: unknown) {
       console.error("Login failed.", (error as Error).message);
     }
   }
 
-  public async register(newProfile: Profile) {
+  public async register(newProfile: Profile, password: string) {
     try {
-      await apiClient.register("password", newProfile);
+      await apiClient.register(password, newProfile);
       const profile = await apiClient.getProfile();
-      console.log("profile", profile);
+      localStorage.setItem("user", JSON.stringify(profile));
     } catch (error: unknown) {
       console.error("Registration failed.", (error as Error).message);
     }
   }
 
-  public async getProfile() {
+  public async getProfile(): Promise<Profile | null> {
     try {
       return await apiClient.getProfile();
     } catch (error: unknown) {
