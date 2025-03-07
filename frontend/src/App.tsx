@@ -35,14 +35,11 @@ function App() {
         <Route path="/" element={<Start />} />
 
         {/* These pages are always accessible */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register setUser={setUser} />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
 
         {/* Defer to authenticated router */}
-        <Route
-          path="/app/*"
-          element={<AuthRouter user={user} setUser={setUser} />}
-        />
+        <Route path="/app/*" element={<AuthRouter user={user} />} />
 
         {/* Redirect to Start if any unknown route */}
         <Route path="*" element={<Navigate to="/" />} />

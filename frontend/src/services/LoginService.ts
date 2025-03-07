@@ -3,23 +3,43 @@ import { Profile } from "@shared/Profile";
 // import { Profile } from "@shared/Profile";
 
 export class LoginService {
-  public async login(email: string, password: string) {
+  public async login(
+    email: string,
+    password: string,
+    setUser: (user: Profile) => void
+  ) {
     try {
       await apiClient.login(email, password);
       const profile = await apiClient.getProfile();
+      if (!profile) {
+        throw new Error();
+      }
+      setUser(profile);
       localStorage.setItem("user", JSON.stringify(profile));
+      return profile;
     } catch (error: unknown) {
       console.error("Login failed.", (error as Error).message);
+      return null;
     }
   }
 
-  public async register(newProfile: Profile, password: string) {
+  public async register(
+    newProfile: Profile,
+    password: string,
+    setUser: (user: Profile) => void
+  ) {
     try {
       await apiClient.register(password, newProfile);
       const profile = await apiClient.getProfile();
+      if (!profile) {
+        throw new Error();
+      }
+      setUser(profile);
       localStorage.setItem("user", JSON.stringify(profile));
+      return profile;
     } catch (error: unknown) {
       console.error("Registration failed.", (error as Error).message);
+      return null;
     }
   }
 

@@ -4,8 +4,13 @@ import paws from "../assets/paws.png";
 
 import "./Login.css";
 import { LoginService } from "../services/LoginService";
+import { Profile } from "@shared/Profile";
 
-const Login = () => {
+interface Props {
+  setUser: (user: Profile) => void;
+}
+
+const Login = (props: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -18,7 +23,11 @@ const Login = () => {
 
     try {
       const service = new LoginService();
-      await service.login(email, password);
+      const user = await service.login(email, password, props.setUser);
+      if (!user) {
+        alert("Login failed. Invalid email or password");
+        return;
+      }
       navigate("/app");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {

@@ -7,7 +7,6 @@ import { Profile, ShortProfile } from "@shared/Profile";
 
 interface Props {
   user: Profile | null;
-  setUser: (user: Profile | null) => void;
 }
 
 const Home = (props: Props) => {

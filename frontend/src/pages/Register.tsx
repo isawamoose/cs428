@@ -8,7 +8,11 @@ import "./Register.css";
 import { LoginService } from "../services/LoginService";
 import { Profile } from "@shared/Profile";
 
-const Register = () => {
+interface Props {
+  setUser: (user: Profile) => void;
+}
+
+const Register = (props: Props) => {
   const [step, setStep] = useState(1); // Track registration step
 
   // User info state
@@ -36,7 +40,11 @@ const Register = () => {
         dogPhoto || ""
       );
 
-      await service.register(newProfile, password);
+      const user = await service.register(newProfile, password, props.setUser);
+      if (!user) {
+        alert("Register failed. Invalid information");
+        return;
+      }
 
       navigate("/app");
 
