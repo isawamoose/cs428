@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { LoginService } from "../services/LoginService";
 import Navbar from "./Navbar";
 import { Profile } from "@shared/Profile";
+import { Settings } from "../pages/Settings";
 
 interface Props {
   user: Profile | null;
@@ -28,6 +29,7 @@ const AuthRouter = (props: Props) => {
     <div className="authenticated">
       <Routes>
         <Route path="/" element={<Home user={props.user} />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
       <Navbar />
     </div>

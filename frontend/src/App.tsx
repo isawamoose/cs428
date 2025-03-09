@@ -37,7 +37,6 @@ function App() {
         {/* These pages are always accessible */}
         <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
-
         {/* Defer to authenticated router */}
         <Route path="/app/*" element={<AuthRouter user={user} />} />
 
