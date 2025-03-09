@@ -6,8 +6,8 @@ const Navbar = () => {
 
   return (
     <nav className="app-navbar">
-      <LuHouse onClick={() => navigate("/app")} />
       <LuBone onClick={() => navigate("/app/matches")} />
+      <LuHouse onClick={() => navigate("/app")} />
       <LuUser onClick={() => navigate("/app/settings")} />
     </nav>
   );

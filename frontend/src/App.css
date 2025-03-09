@@ -52,7 +52,7 @@ button:focus-visible {
 
 button.btn-blue {
   background-color: #038eff;
-  color: white
+  color: white;
 }
 
 input {
@@ -84,11 +84,7 @@ form > div {
   position: sticky;
   bottom: 0;
   display: flex;
-  background: linear-gradient(
-    to bottom,
-    #03c0ff,
-    #038eff
-  );
+  background: linear-gradient(to bottom, #03c0ff, #038eff);
   height: 4rem;
   align-items: center;
   justify-content: space-around;

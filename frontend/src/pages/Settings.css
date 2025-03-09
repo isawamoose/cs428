@@ -4,4 +4,25 @@
   margin-top: 0;
   background: url("paws-bg.png");
   overflow-x: clip;
+  position: relative;
+}
+
+button.settings {
+  font-size: 1.5rem;
+  width: 14rem;
+  padding: 0.3rem;
+  position: absolute;
+  color: white;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+button.delete-account {
+  bottom: 7rem;
+  background-color: #e65565;
+}
+
+button.log-out {
+  bottom: 12rem;
+  background-color: #ffbe00;
 }
