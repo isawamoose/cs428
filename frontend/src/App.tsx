@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from "react-router-dom";
 import Start from "./pages/Start";
 import Register from "./pages/Register";
@@ -31,15 +31,15 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Always show Start page first */}
-        <Route path="/" element={<Start />} />
+        {/* Show Start page first if user is not logged in */}
+        <Route path="/" element={user ? < Navigate to='/app'/> : <Start />} />
 
         {/* These pages are always accessible */}
         <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
 
         {/* Defer to authenticated router */}
-        <Route path="/app/*" element={<AuthRouter user={user} />} />
+        <Route path="/app/*" element={<AuthRouter setUser={setUser} user={user} />} />
 
         {/* Redirect to Start if any unknown route */}
         <Route path="*" element={<Navigate to="/" />} />

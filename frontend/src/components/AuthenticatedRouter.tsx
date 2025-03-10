@@ -7,6 +7,7 @@ import { Profile } from "@shared/Profile";
 
 interface Props {
   user: Profile | null;
+  setUser: (user: Profile | null) => void;
 }
 
 const AuthRouter = (props: Props) => {
@@ -16,7 +17,9 @@ const AuthRouter = (props: Props) => {
   async function getUser() {
     const user = await loginService.getProfile();
     if (!user) {
-      navigate("/login");
+      localStorage.removeItem('user'); // fix bug when there is a user in local storage but no valid authtoken
+      props.setUser(null); // fix bug when there is a user in local storage but no valid authtoken
+      navigate("/");
     }
   }
 
