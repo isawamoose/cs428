@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../pages/Home";
+import Matches from "../pages/Matches";
 import { useEffect } from "react";
 import { LoginService } from "../services/LoginService";
 import Navbar from "./Navbar";
@@ -18,7 +19,7 @@ const AuthRouter = (props: Props) => {
   async function getUser() {
     const user = await loginService.getProfile();
     if (!user) {
-      localStorage.removeItem('user'); // fix bug when there is a user in local storage but no valid authtoken
+      localStorage.removeItem("user"); // fix bug when there is a user in local storage but no valid authtoken
       props.setUser(null); // fix bug when there is a user in local storage but no valid authtoken
       navigate("/");
     }
@@ -31,8 +32,12 @@ const AuthRouter = (props: Props) => {
   return (
     <div className="authenticated">
       <Routes>
+        <Route path="/matches" element={<Matches />} />
         <Route path="/" element={<Home user={props.user} />} />
-        <Route path="/settings" element={<ProfileSettings user={props.user} />} />
+        <Route
+          path="/settings"
+          element={<ProfileSettings user={props.user} />}
+        />
       </Routes>
       <Navbar />
     </div>

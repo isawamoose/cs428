@@ -11,7 +11,8 @@ interface Props {
 
 const Home = (props: Props) => {
   const [displayedUser, setDisplayedUser] = useState<ShortProfile | null>(null);
-  const [matchService] = useState(new MatchService());
+  //const [matchService] = useState(new MatchService());
+  const matchService = MatchService.instance;
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
