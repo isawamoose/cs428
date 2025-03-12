@@ -1,0 +1,80 @@
+.matches-page {
+	height: 100%;
+	min-height: 100vh;
+	margin-top: 0;
+	background: url("paws-bg.png");
+	overflow-x: clip;
+}
+
+.matches-page .match-profile-header {
+	margin-left: 2.5rem;
+	width: 100%;
+	display: flex;
+	align-items: flex-end;
+	gap: 1rem;
+}
+
+.matches-page .match-title {
+	color: #038eff;
+	margin-bottom: .5rem;
+}
+
+.matches-page .match-list {
+	display: flex;
+	flex-direction: column; /* Stack match cards vertically */
+	gap: 2rem; /* Space between each card */
+  }
+  
+.matches-page .match-card {
+	display: flex;
+	align-items: center; 
+	padding-left: 1rem;
+  }
+  
+.matches-page .match-image {
+    width: 20%; 
+    aspect-ratio: 1 / 1;
+    border-radius: 10%; 
+    border: 3px solid #FFBE00;
+    margin-right: 1rem;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5); 
+    object-fit: cover; /* Ensures content scales to fill the square */
+}
+  
+.matches-page .match-details {
+	display: flex;
+	flex-direction: column; /* Stack content vertically */
+  }
+  
+.matches-page .match-header {
+	display: flex;
+	align-items: center; /* Align dogName and breed horizontally */
+	gap: 10px; /* Space between dogName and breed */
+  }
+  
+.matches-page .match-name {
+	font-size: 2.5rem;
+	font-weight: bold;
+	color: #038eff;
+	margin: 0;
+  }
+
+  .matches-page .match-breed {
+	opacity: .5;
+	color: black;
+	margin: 0;
+  }
+  
+.matches-page .match-description {
+	margin-top: 5px;
+	color: black; 
+}
+
+.matches-page .no-matches {
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;           
+    text-align: center; 
+}

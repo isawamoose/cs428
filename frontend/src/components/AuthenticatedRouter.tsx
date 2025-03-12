@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../pages/Home";
+import Matches from "../pages/Matches";
 import { useEffect } from "react";
 import { LoginService } from "../services/LoginService";
 import Navbar from "./Navbar";
@@ -28,6 +29,7 @@ const AuthRouter = (props: Props) => {
     <div className="authenticated">
       <Routes>
         <Route path="/" element={<Home user={props.user} />} />
+        <Route path="/matches" element={<Matches />} />
       </Routes>
       <Navbar />
     </div>
