@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { LoginService } from "../services/LoginService";
 import Navbar from "./Navbar";
 import { Profile } from "@shared/Profile";
+import ProfileSettings from "../pages/ProfileSettings";
 
 interface Props {
   user: Profile | null;
+  setUser: (user: Profile | null) => void;
 }
 
 const AuthRouter = (props: Props) => {
@@ -16,7 +18,9 @@ const AuthRouter = (props: Props) => {
   async function getUser() {
     const user = await loginService.getProfile();
     if (!user) {
-      navigate("/login");
+      localStorage.removeItem('user'); // fix bug when there is a user in local storage but no valid authtoken
+      props.setUser(null); // fix bug when there is a user in local storage but no valid authtoken
+      navigate("/");
     }
   }
 
@@ -28,6 +32,7 @@ const AuthRouter = (props: Props) => {
     <div className="authenticated">
       <Routes>
         <Route path="/" element={<Home user={props.user} />} />
+        <Route path="/settings" element={<ProfileSettings user={props.user} />} />
       </Routes>
       <Navbar />
     </div>

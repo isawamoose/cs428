@@ -21,6 +21,17 @@ class ApiClient {
     const profile = Profile.fromObject(response);
     return profile;
   }
+
+  async logout(): Promise<void> {
+    await this.apiRequest.request("logout", "DELETE");
+  }
+
+  async deleteAccount(): Promise<void> {
+    // This does not currentlly delete an account
+    // This is just here for manual testing purposes
+    // This function still needs to be correctly implemented
+    await this.apiRequest.request("logout", "DELETE");
+  }
 }
 
 const apiClient = new ApiClient();
