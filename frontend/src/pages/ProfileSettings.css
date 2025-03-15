@@ -71,3 +71,28 @@
 .btn-red {
 	background-color: #e65565;
 }
+
+.settings-page > dialog[open] {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 75%;
+	text-align: center;
+	border: 0;
+	border-radius: .5rem;
+}
+
+.settings-page > dialog[open] > h2 {
+	margin: .5rem;
+	line-height: 1em;
+}
+
+.settings-page > dialog[open] > p {
+	margin: 0 1rem 1rem;
+	line-height: 1.25em;
+	font-size: 1.15rem;
+}
+
+.settings-page > dialog[open] > button.big-text {
+	font-size: 1.15rem;
+}
