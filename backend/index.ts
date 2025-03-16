@@ -114,6 +114,21 @@ secureApiRouter.put("/profile", async (req, res) => {
   }
 });
 
+// Delete user profile
+secureApiRouter.delete("/profile", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  const success = await userService.deleteUserProfile(email);
+  if (success) {
+    res.send("Profile deleted successfully");
+  } else {
+    res.status(400).send("Failed to delete profile");
+  }
+});
+
 // Logout
 secureApiRouter.delete("/logout", async (req, res) => {
   const email = req.email;
