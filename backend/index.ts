@@ -123,6 +123,7 @@ secureApiRouter.delete("/profile", async (req, res) => {
   }
   const success = await userService.deleteUserProfile(email);
   if (success) {
+    res.clearCookie(AUTH_COOKIE_NAME);
     res.send("Profile deleted successfully");
   } else {
     res.status(400).send("Failed to delete profile");
