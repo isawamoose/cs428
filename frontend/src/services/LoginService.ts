@@ -51,4 +51,20 @@ export class LoginService {
       return null;
     }
   }
+
+  public async logout(): Promise<void> {
+    try {
+      apiClient.logout();
+    } catch (error: unknown){
+      console.error("Failed to logout.", (error as Error).message)
+    }
+  }
+
+  public async deleteAccount(): Promise<void> {
+    try {
+      apiClient.deleteAccount();
+    } catch (error: unknown){
+      console.error("Failed to delete account.", (error as Error).message)
+    }
+  }
 }
