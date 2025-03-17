@@ -96,6 +96,11 @@ form > div {
   padding-bottom: 1rem;
 }
 
+.authenticated > div {
+  background: url("/paws-bg.png");
+  min-height: calc(100vh - 5rem);
+}
+
 /* Media query for mobile screens (up to 600px) */
 /* @media (max-width: 600px) {
   form {
