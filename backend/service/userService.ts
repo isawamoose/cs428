@@ -56,12 +56,6 @@ export class UserService {
     return await this.db.updateUserProfile(profile);
   }
 
-  async deleteUserProfile(email: string): Promise<boolean> {
-    await this.db.deleteToken(email);
-    await this.db.deleteUserAuth(email);
-    return await this.db.deleteUserProfile(email);
-  }
-
   generateToken(): string {
     return uuidv4();
   }
