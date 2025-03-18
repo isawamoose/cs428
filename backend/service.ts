@@ -51,8 +51,7 @@ apiRouter.put("/login", async (req, res) => {
   const password = req.body.password;
   const token = await userService.login(email, password);
   if (token) {
-    res.cookie(AUTH_COOKIE_NAME, token, { secure: true, sameSite: "none" });
-    res.send("Logged in successfully");
+    res.cookie(AUTH_COOKIE_NAME, token).send("Logged in successfully");
   } else {
     res.status(401).send("Invalid email or password");
   }
@@ -147,4 +146,4 @@ app.use((_req, res) => {
   res.send("Welcome to Puppr! You are attempting to reach an unknown path.");
 });
 
-export default app;
+export { app };
