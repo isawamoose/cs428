@@ -1,4 +1,4 @@
-import app from "./service";
+import { app } from "./service";
 
 // Start the server
 const PORT = 3000;
