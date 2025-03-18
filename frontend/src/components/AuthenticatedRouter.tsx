@@ -6,6 +6,7 @@ import { LoginService } from "../services/LoginService";
 import Navbar from "./Navbar";
 import { Profile } from "@shared/Profile";
 import ProfileSettings from "../pages/ProfileSettings";
+import Terms from "../pages/Terms";
 
 interface Props {
   user: Profile | null;
@@ -38,6 +39,7 @@ const AuthRouter = (props: Props) => {
           path="/settings"
           element={<ProfileSettings user={props.user} />}
         />
+        <Route path="/terms" element={<Terms />}/> 
       </Routes>
       <Navbar />
     </div>
