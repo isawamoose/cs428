@@ -1,8 +1,7 @@
 import { apiClient } from "../api/ApiClient";
 import { Profile } from "@shared/Profile";
-// import { Profile } from "@shared/Profile";
 
-export class LoginService {
+export class UserService {
   public async login(
     email: string,
     password: string,
@@ -48,6 +47,25 @@ export class LoginService {
       return await apiClient.getProfile();
     } catch (error: unknown) {
       console.error("Failed to get profile.", (error as Error).message);
+      return null;
+    }
+  }
+
+  public async updateProfile(
+    newProfile: Profile,
+    setUser: (user: Profile) => void
+  ): Promise<Profile | null> {
+    try {
+      console.log("newProfile", newProfile);
+      const profile = await apiClient.updateProfile(newProfile);
+      if (!profile) {
+        throw new Error();
+      }
+      setUser(profile);
+      localStorage.setItem("user", JSON.stringify(profile));
+      return profile;
+    } catch (error: unknown) {
+      console.error("Failed to update profile.", (error as Error).message);
       return null;
     }
   }

@@ -1,29 +1,37 @@
 import { Profile } from "@shared/Profile";
 import "./EditProfile.css";
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LuChevronLeft } from "react-icons/lu";
 
 interface Props {
-  user: Profile | null;
+  user: Profile;
+  setUser: (user: Profile) => void;
 }
 
-const EditProfile = ({ user }: Props) => {
-  const [email, setEmail] = useState(user?.email ?? "");
-  const [dogName, setDogName] = useState(user?.dogName ?? "");
-  const [breed, setBreed] = useState(user?.breed ?? "");
-  const [description, setDescription] = useState(user?.description ?? "");
-  const [ownerName, setOwnerName] = useState(user?.ownerName ?? "");
-  const [imageLink, setImageLink] = useState(user?.imageLink ?? "");
+const EditProfile = (props: Props) => {
+  const [dogName, setDogName] = useState(props.user.dogName);
+  const [breed, setBreed] = useState(props.user.breed);
+  const [description, setDescription] = useState(props.user.description);
+  const [ownerName, setOwnerName] = useState(props.user.ownerName);
 
   const navigate = useNavigate();
-  const [service] = useState(new LoginService());
+  const [service] = useState(new UserService());
 
-  //this calls update and then sends user back to ProfileSettings Page
+  // this calls update and then sends user back to ProfileSettings Page
   const handleUpdate = async () => {
-    //await service.updateAccount();
-    //alert("Profile updated successfully!");
+    await service.updateProfile(
+      new Profile(
+        props.user.email,
+        props.user.imageLink,
+        dogName,
+        breed,
+        description,
+        ownerName
+      ),
+      props.setUser
+    );
     navigate(-1);
   };
 
@@ -39,19 +47,13 @@ const EditProfile = ({ user }: Props) => {
           <div className="edit-profile-pic">
             <img
               className="edit-image"
-              src={user?.imageLink}
-              alt={user?.dogName}
+              src={props.user.imageLink}
+              alt={props.user.dogName}
             />
           </div>
 
           <div>
-            <h2>Email</h2>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email"
-            />
+            <h2 className="email">Email: {props.user.email}</h2>
           </div>
 
           <div>

@@ -3,14 +3,14 @@ import "./ProfileSettings.css";
 import { Link, useNavigate } from "react-router-dom";
 import { LuChevronRight } from "react-icons/lu";
 import { useRef, useState } from "react";
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 
 interface Props {
   user: Profile | null;
 }
 
 const ProfileSettings = (props: Props) => {
-  const [service] = useState(new LoginService());
+  const [service] = useState(new UserService());
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const navigate = useNavigate();
 

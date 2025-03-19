@@ -108,7 +108,7 @@ secureApiRouter.put("/profile", async (req, res) => {
 
   const success = await userService.updateUserProfile(email, updatedProfile);
   if (success) {
-    res.send("Profile updated successfully");
+    res.send(profileObj);
   } else {
     res.status(400).send("Failed to update profile");
   }
