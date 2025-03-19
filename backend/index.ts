@@ -3,7 +3,8 @@ import bodyParser from "body-parser";
 import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
-import { Profile } from "../shared/Profile";
+import { Profile, MatchProfile } from "../shared/Profile";
+import { MatchService } from "./service/matchService";
 
 declare global {
   namespace Express {
@@ -16,6 +17,7 @@ declare global {
 const app = express();
 const db = new Database();
 const userService = new UserService(db);
+const matchService = new MatchService(db);
 
 const AUTH_COOKIE_NAME = "token";
 app.use(cookieParser());
@@ -124,6 +126,27 @@ secureApiRouter.delete("/logout", async (req, res) => {
   await userService.logout(email);
   res.clearCookie(AUTH_COOKIE_NAME);
   res.send("Logged out successfully");
+});
+
+secureApiRouter.post("/like", async (req, res) => {
+  const { likerProfile, likeeProfile } = req.body as {
+    likerProfile: MatchProfile;
+    likeeProfile: MatchProfile;
+  };
+
+  if (!likerProfile || !likeeProfile) {
+    res.status(400).send("Missing profile data");
+    return;
+  }
+  try {
+    const isMatch: boolean = await matchService.like(
+      likerProfile,
+      likeeProfile
+    );
+    res.status(200).send(isMatch);
+  } catch (error) {
+    res.status(500).send("Server error while trying to add like");
+  }
 });
 
 // Return default message if the path is unknown

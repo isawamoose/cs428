@@ -22,4 +22,25 @@ export const tableCreateStatements = [
     token VARCHAR(255) NOT NULL,
     FOREIGN KEY (email) REFERENCES user(email)
   )`,
+
+  `CREATE TABLE IF NOT EXISTS like(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    likerEmail VARCHAR(255) NOT NULL,
+    likeeEmail VARCHAR(255) NOT NULL,
+    FOREIGN KEY (likerEmail) REFERENCES user(email),
+    FOREIGN KEY (likeeEmail) REFERENCES user(email),
+    INDEX idx_likerEmail (likerEmail)
+
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS match(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user1Email VARCHAR(255) NOT NULL,
+    user2Email VARCHAR(255) NOT NULL,
+    matchStatus TINYINT(1) NOT NULL DEFAULT 1,
+    FOREIGN KEY (user1Email) REFERENCES user(email),
+    FOREIGN KEY (user2Email) REFERENCES user(email),
+    INDEX idx_user1Email (user1Email),
+    INDEX idx_user2Email (user2Email)
+  )`,
 ];

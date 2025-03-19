@@ -2,7 +2,7 @@ import mysql from "mysql2/promise";
 import { config } from "../config";
 import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
-import { Profile } from "../../shared/Profile";
+import { MatchProfile, Profile } from "../../shared/Profile";
 
 export class Database {
   private initialized: Promise<void>;
@@ -214,5 +214,43 @@ export class Database {
       [email]
     );
     return rows && rows.affectedRows === 1;
+  }
+
+  // Match and like databases
+
+  async addLike(liker: MatchProfile, likee: MatchProfile): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_like",
+      "INSERT INTO `like` (likerEmail, likeeEmail) VALUES (?, ?)",
+      [liker.email, likee.email]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async addMatch(user1Email: string, user2Email: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_match",
+      "INSERT INTO match (user1Email, user2Email) VALUES (?, ?)",
+      [user1Email, user2Email]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async checkMatchAndAdd(
+    liker: MatchProfile,
+    likee: MatchProfile
+  ): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "check_match",
+      "SELECT COUNT(*) AS count FROM `like` WHERE likerEmail = ? AND likeeEmail = ?",
+      [likee.email, liker.email]
+    );
+    if (rows[0].count == 0) return false;
+    else if (rows[0].count > 0) {
+      await this.addMatch(liker.email, likee.email);
+
+      return true;
+    } else
+      throw new Error("Something has gone horribly wrong with the likes table");
   }
 }
