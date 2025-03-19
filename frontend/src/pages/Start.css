@@ -2,11 +2,11 @@ body {
   display: flex; /* Use flexbox to center everything inside the body */
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
-  overflow: hidden;
 }
 
-.start-page {
+.container.start-page {
   margin-top: 12vh;
+  min-height: 88vh;
 }
 
 .background-images {

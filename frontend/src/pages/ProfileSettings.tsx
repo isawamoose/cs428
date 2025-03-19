@@ -50,7 +50,7 @@ const ProfileSettings = (props: Props) => {
 				<Link to={'/app'}><p>Notifications</p><LuChevronRight /></Link>
 				<Link to={'/app'}><p>Privacy</p><LuChevronRight /></Link>
 				<Link to={'/app'}><p>Report an Issue</p><LuChevronRight /></Link>
-				<Link to={'/app'}><p>Terms and Conditions</p><LuChevronRight /></Link>
+				<Link to={'/app/terms'}><p>Terms and Conditions</p><LuChevronRight /></Link>
 			</div>
 
 			<div className='settings-buttons'>
