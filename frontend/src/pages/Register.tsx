@@ -77,9 +77,9 @@ const Register = (props: Props) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   setDogPhoto(reader.result as string); // Convert file to base64 URL
-      // };
+      //reader.onloadend = () => {
+      //setDogPhoto(reader.result as string); // Convert file to base64 URL
+      //};
       reader.readAsDataURL(file);
     }
   };
