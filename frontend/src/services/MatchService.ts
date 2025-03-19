@@ -1,9 +1,9 @@
-import { ShortProfile } from "@shared/Profile";
+import { ShortProfile, MatchProfile } from "@shared/Profile";
 import { FakeData } from "@shared/util/FakeData";
 
 export class MatchService {
   private static _instance: MatchService;
-  private matchedUsers: ShortProfile[] = [];
+  private matchedUsers: MatchProfile[] = [];
 
   // Singleton instance
   public static get instance(): MatchService {
@@ -24,13 +24,20 @@ export class MatchService {
     const isMatch = Math.random() > 0.75;
 
     if (isMatch) {
-      this.matchedUsers.push(otherUser);
+
+      // This is kinda hacky
+      // Once this functionality exists on the backend, we should send the short profile and get the match profile back 
+      const matchProfile = FakeData.instance.getFakeUsers().filter((profile) => {
+        return JSON.stringify(otherUser) == JSON.stringify(profile.shortProfile)
+      })[0].matchProfile
+
+      this.matchedUsers.push(matchProfile);
     }
 
     return isMatch;
   }
 
-  public getMatchedUsers(): ShortProfile[] {
+  public getMatchedUsers(): MatchProfile[] {
     return this.matchedUsers;
   }
 }
