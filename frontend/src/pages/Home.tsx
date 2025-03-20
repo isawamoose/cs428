@@ -13,6 +13,7 @@ const Home = (props: Props) => {
   const [displayedUser, setDisplayedUser] = useState<ShortProfile | null>(null);
   //const [matchService] = useState(new MatchService());
   const matchService = MatchService.instance;
+  const [email, setEmail] = useState<string>('');
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
@@ -26,8 +27,9 @@ const Home = (props: Props) => {
   }, []);
 
   const handleLike = async () => {
-    const isMatch = await matchService.match(displayedUser!);
+    const [isMatch, email] = await matchService.match(displayedUser!);
     if (isMatch) {
+      setEmail(email)
       dialogRef.current?.showModal();
     } else {
       await getNewUser();
@@ -45,7 +47,7 @@ const Home = (props: Props) => {
 
   const startTalking = () => {
     dialogRef.current?.close();
-    navigate(`/contact/${displayedUser!.ownerName}`);
+    navigate(`/app/user/${email}`);
   };
 
   if (displayedUser) {

@@ -8,6 +8,7 @@ import { Profile } from "@shared/Profile";
 import ProfileSettings from "../pages/ProfileSettings";
 import EditProfile from "../pages/EditProfile";
 import Terms from "../pages/Terms";
+import ProfileView from "../pages/ProfileView";
 
 interface Props {
   user: Profile | null;
@@ -35,6 +36,7 @@ const AuthRouter = (props: Props) => {
     <div className="authenticated">
       <Routes>
         <Route path="/matches" element={<Matches />} />
+        <Route path="/user/:email?" element={<ProfileView />} />
         <Route path="/" element={<Home user={props.user} />} />
         <Route
           path="/settings"
