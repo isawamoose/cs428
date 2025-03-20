@@ -24,11 +24,11 @@ const EditProfile = (props: Props) => {
     await service.updateProfile(
       new Profile(
         props.user.email,
-        props.user.imageLink,
         dogName,
         breed,
         description,
-        ownerName
+        ownerName,
+        props.user.imageLink
       ),
       props.setUser
     );
