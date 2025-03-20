@@ -2,7 +2,7 @@ import { MatchProfile, Profile } from "@shared/Profile"
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MatchService } from "../services/MatchService";
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 import '../pages/Home.css'
 // Imported Home.css because this page has very similar styles
 
@@ -12,7 +12,7 @@ const ProfileView = () => {
 	// if the path us "/app/user" -- display the currently logged in user
 
 	const {email} = useParams();
-	const [loginService] = useState<LoginService>(new LoginService());
+	const [loginService] = useState<UserService>(new UserService());
 	const [profile, setProfile] = useState<Profile | MatchProfile | null>();
 
 	useEffect(() => {
