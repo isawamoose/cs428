@@ -18,8 +18,17 @@ class ApiClient {
       "profile",
       "GET"
     )) as ProfileObject;
-    const profile = Profile.fromObject(response);
-    return profile;
+    return Profile.fromObject(response);
+  }
+
+  async updateProfile(profile: Profile): Promise<Profile> {
+    const body = { profile };
+    const response: ProfileObject = (await this.apiRequest.request(
+      "profile",
+      "PUT",
+      body
+    )) as ProfileObject;
+    return Profile.fromObject(response);
   }
 
   async logout(): Promise<void> {

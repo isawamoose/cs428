@@ -2,10 +2,11 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Matches from "../pages/Matches";
 import { useEffect } from "react";
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 import Navbar from "./Navbar";
 import { Profile } from "@shared/Profile";
 import ProfileSettings from "../pages/ProfileSettings";
+import EditProfile from "../pages/EditProfile";
 import Terms from "../pages/Terms";
 
 interface Props {
@@ -15,10 +16,10 @@ interface Props {
 
 const AuthRouter = (props: Props) => {
   const navigate = useNavigate();
-  const loginService = new LoginService();
+  const userService = new UserService();
 
   async function getUser() {
-    const user = await loginService.getProfile();
+    const user = await userService.getProfile();
     if (!user) {
       localStorage.removeItem("user"); // fix bug when there is a user in local storage but no valid authtoken
       props.setUser(null); // fix bug when there is a user in local storage but no valid authtoken
@@ -39,7 +40,11 @@ const AuthRouter = (props: Props) => {
           path="/settings"
           element={<ProfileSettings user={props.user} />}
         />
-        <Route path="/terms" element={<Terms />}/> 
+        <Route
+          path="/settings/edit-profile"
+          element={<EditProfile user={props.user!} setUser={props.setUser} />}
+        />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
       <Navbar />
     </div>
