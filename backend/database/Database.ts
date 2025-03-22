@@ -216,13 +216,16 @@ export class Database {
     return rows && rows.affectedRows === 1;
   }
 
-  // Match and like databases
+  // Match and like tables
+  // addLike adds a like to the like table and returns true if it results in a match
+  // checkMatchAndAdd checks if the like results in a match and adds it to the match table
+  // addMatch adds a match to the match table
 
-  async addLike(liker: MatchProfile, likee: MatchProfile): Promise<boolean> {
+  async addLike(likerEmail: string, likeeEmail: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "add_like",
       "INSERT INTO `like` (likerEmail, likeeEmail) VALUES (?, ?)",
-      [liker.email, likee.email]
+      [likerEmail, likeeEmail]
     );
     return rows && rows.affectedRows === 1;
   }
@@ -237,21 +240,22 @@ export class Database {
   }
 
   async checkMatchAndAdd(
-    liker: MatchProfile,
-    likee: MatchProfile
+    likerEmail: string,
+    likeeEmail: string
   ): Promise<boolean> {
+    // Check if likee has already liked the liker
+    // If so, add a match to the match table and return true
+    // If not, return false
     const [rows] = await this.executeQuery(
       "check_match",
       "SELECT COUNT(*) AS count FROM `like` WHERE likerEmail = ? AND likeeEmail = ?",
-      [likee.email, liker.email]
+      [likeeEmail, likerEmail]
     );
     const count = rows[0].count;
     if (count == 0) return false;
     else if (count > 0) {
-      await this.addMatch(liker.email, likee.email);
-
+      await this.addMatch(likerEmail, likeeEmail);
       return true;
-    } else
-      throw new Error("Something has gone horribly wrong with the likes table");
+    } else throw new Error("Error checking / adding match");
   }
 }
