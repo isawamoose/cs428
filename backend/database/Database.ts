@@ -245,8 +245,9 @@ export class Database {
       "SELECT COUNT(*) AS count FROM `like` WHERE likerEmail = ? AND likeeEmail = ?",
       [likee.email, liker.email]
     );
-    if (rows[0].count == 0) return false;
-    else if (rows[0].count > 0) {
+    const count = rows[0].count;
+    if (count == 0) return false;
+    else if (count > 0) {
       await this.addMatch(liker.email, likee.email);
 
       return true;

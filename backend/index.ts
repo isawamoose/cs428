@@ -129,20 +129,14 @@ secureApiRouter.delete("/logout", async (req, res) => {
 });
 
 secureApiRouter.post("/like", async (req, res) => {
-  const { likerProfile, likeeProfile } = req.body as {
-    likerProfile: MatchProfile;
-    likeeProfile: MatchProfile;
-  };
+  const { liker, likee } = req.body;
 
-  if (!likerProfile || !likeeProfile) {
-    res.status(400).send("Missing profile data");
+  if (!liker || !likee) {
+    res.status(400).send("Missing liker or likee");
     return;
   }
   try {
-    const isMatch: boolean = await matchService.like(
-      likerProfile,
-      likeeProfile
-    );
+    const isMatch: boolean = await matchService.like(liker, likee);
     res.status(200).send(isMatch);
   } catch (error) {
     res.status(500).send("Server error while trying to add like");
