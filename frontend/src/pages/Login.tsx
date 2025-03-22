@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import paws from "../assets/paws.png";
 
 import "./Login.css";
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 import { Profile } from "@shared/Profile";
 
 interface Props {
@@ -22,7 +22,7 @@ const Login = (props: Props) => {
     }
 
     try {
-      const service = new LoginService();
+      const service = new UserService();
       const user = await service.login(email, password, props.setUser);
       if (!user) {
         alert("Login failed. Invalid email or password");
