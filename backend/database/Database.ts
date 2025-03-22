@@ -216,15 +216,15 @@ export class Database {
     return rows && rows.affectedRows === 1;
   }
 
-  // Match and like tables
-  // addLike adds a like to the like table and returns true if it results in a match
-  // checkMatchAndAdd checks if the like results in a match and adds it to the match table
+  // Match and vote tables
+  // addLike adds a vote to the vote table and returns true if it results in a match
+  // checkMatchAndAdd checks if the vote results in a match and adds it to the match table
   // addMatch adds a match to the match table
 
   async addLike(likerEmail: string, likeeEmail: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "add_like",
-      "INSERT INTO `like` (likerEmail, likeeEmail) VALUES (?, ?)",
+      "INSERT INTO vote (likerEmail, likeeEmail) VALUES (?, ?)",
       [likerEmail, likeeEmail]
     );
     return rows && rows.affectedRows === 1;
@@ -233,7 +233,7 @@ export class Database {
   async addMatch(user1Email: string, user2Email: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "add_match",
-      "INSERT INTO match (user1Email, user2Email) VALUES (?, ?)",
+      "INSERT INTO dog_match (user1Email, user2Email) VALUES (?, ?)",
       [user1Email, user2Email]
     );
     return rows && rows.affectedRows === 1;
@@ -248,7 +248,7 @@ export class Database {
     // If not, return false
     const [rows] = await this.executeQuery(
       "check_match",
-      "SELECT COUNT(*) AS count FROM `like` WHERE likerEmail = ? AND likeeEmail = ?",
+      "SELECT COUNT(*) AS count FROM vote WHERE likerEmail = ? AND likeeEmail = ?",
       [likeeEmail, likerEmail]
     );
     const count = rows[0].count;
@@ -262,7 +262,7 @@ export class Database {
   async getMatches(email: string): Promise<MatchProfile[]> {
     const [rows] = await this.executeQuery(
       "get_matches",
-      "SELECT user1Email, user2Email FROM `match` WHERE user1Email = ? OR user2Email = ?",
+      "SELECT user1Email, user2Email FROM dog_match WHERE user1Email = ? OR user2Email = ?",
       [email, email]
     );
     if (rows.length === 0) {
@@ -284,7 +284,7 @@ export class Database {
   async getUnlikedProfiles(email: string): Promise<ShortProfile[]> {
     const [rows] = await this.executeQuery(
       "get_unliked_profiles",
-      "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM `like` WHERE likerEmail = ?)",
+      "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM vote WHERE likerEmail = ?)",
       [email, email]
     );
     if (rows.length === 0) {

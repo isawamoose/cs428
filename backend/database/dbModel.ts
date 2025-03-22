@@ -23,17 +23,16 @@ export const tableCreateStatements = [
     FOREIGN KEY (email) REFERENCES user(email)
   )`,
 
-  `CREATE TABLE IF NOT EXISTS like(
+  `CREATE TABLE IF NOT EXISTS vote(
     id INT AUTO_INCREMENT PRIMARY KEY,
     likerEmail VARCHAR(255) NOT NULL,
     likeeEmail VARCHAR(255) NOT NULL,
     FOREIGN KEY (likerEmail) REFERENCES user(email),
     FOREIGN KEY (likeeEmail) REFERENCES user(email),
     INDEX idx_likerEmail (likerEmail)
-
   )`,
 
-  `CREATE TABLE IF NOT EXISTS match(
+  `CREATE TABLE IF NOT EXISTS dog_match(
     id INT AUTO_INCREMENT PRIMARY KEY,
     user1Email VARCHAR(255) NOT NULL,
     user2Email VARCHAR(255) NOT NULL,
