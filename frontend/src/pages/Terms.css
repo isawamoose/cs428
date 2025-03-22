@@ -1,0 +1,57 @@
+.terms-page {
+	display: flex;
+	flex-direction: column;
+	padding: 0 1rem;
+	color: #404040;
+	overflow-y: scroll;
+}
+
+.terms-page h1, .terms-page a {
+	color: #038eff;
+}
+
+.back-nav {
+	font-size: 1.25em;
+	margin-top: 1rem;
+	display: flex;
+	align-items: center;
+}
+
+.back-nav h3 {
+	padding-top: .25rem;
+}
+
+.terms-page h1 {
+	margin: .5rem 0;
+}
+
+.terms-page h3 {
+	margin: 0;
+}
+
+.terms-page ol {
+	padding-left: 2rem;
+	padding-right: 1rem;
+	font-size: 1.1em;
+}
+
+.terms-page ol li::marker {
+	font-size: 1.5em;
+}
+
+.terms-page ol li h2 {
+	margin-bottom: 0;
+}
+
+.terms-page ol li p {
+	margin-top: 0;
+}
+
+.terms-page ol ul li::marker {
+	font-size: 1em;
+}
+
+.terms-page ol ul {
+	padding-left: 1.5rem;
+	list-style-type:disc;
+}

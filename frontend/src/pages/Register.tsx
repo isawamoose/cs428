@@ -5,7 +5,7 @@ import check from "../assets/check.png";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
-import { LoginService } from "../services/LoginService";
+import { UserService } from "../services/UserService";
 import { Profile } from "@shared/Profile";
 
 interface Props {
@@ -30,7 +30,7 @@ const Register = (props: Props) => {
 
   const handleRegister = async () => {
     try {
-      const service = new LoginService();
+      const service = new UserService();
       const newProfile = new Profile(
         email,
         dogName,
@@ -77,9 +77,9 @@ const Register = (props: Props) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   setDogPhoto(reader.result as string); // Convert file to base64 URL
-      // };
+      //reader.onloadend = () => {
+      //setDogPhoto(reader.result as string); // Convert file to base64 URL
+      //};
       reader.readAsDataURL(file);
     }
   };
