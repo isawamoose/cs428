@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { MatchService } from "../services/MatchService"; 
-import { ShortProfile } from "@shared/Profile";
+import { MatchProfile } from "@shared/Profile";
 import "./Matches.css";
+import { useNavigate } from "react-router-dom";
 
 const Matches = () => {
-  const [matchedUsers, setMatchedUsers] = useState<ShortProfile[]>([]);
+  const [matchedUsers, setMatchedUsers] = useState<MatchProfile[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMatchedUsers = async () => {
@@ -12,6 +14,7 @@ const Matches = () => {
       setMatchedUsers(users);
 
       console.log(`Total matched users: ${users.length}`);
+      console.log(users)
     };
 
     fetchMatchedUsers();
@@ -26,7 +29,7 @@ const Matches = () => {
       <div className="match-list">
         {matchedUsers.length > 0 ? (
           matchedUsers.map((user) => (
-            <div key={user.ownerName} className="match-card">
+            <div key={user.email} className="match-card" onClick={() => navigate(`/app/user/${user.email}`)}>
               <img src={user.imageLink} alt={`${user.dogName}'s profile`} className="match-image" />
 
               <div className="match-details">
