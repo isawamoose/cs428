@@ -46,6 +46,7 @@ const AuthRouter = (props: Props) => {
           path="/settings/edit-profile"
           element={<EditProfile user={props.user!} setUser={props.setUser} />}
         />
+        <Route path="/settings/view-profile" element={<ProfileView />} />
         <Route path="/terms" element={<Terms />} />
       </Routes>
       <Navbar />
