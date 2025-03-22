@@ -2,7 +2,7 @@ import mysql from "mysql2/promise";
 import { config } from "../config";
 import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
-import { MatchProfile, Profile } from "../../shared/Profile";
+import { MatchProfile, Profile, ShortProfile } from "../../shared/Profile";
 
 export class Database {
   private initialized: Promise<void>;
@@ -257,5 +257,53 @@ export class Database {
       await this.addMatch(likerEmail, likeeEmail);
       return true;
     } else throw new Error("Error checking / adding match");
+  }
+
+  async getMatches(email: string): Promise<MatchProfile[]> {
+    const [rows] = await this.executeQuery(
+      "get_matches",
+      "SELECT user1Email, user2Email FROM `match` WHERE user1Email = ? OR user2Email = ?",
+      [email, email]
+    );
+    if (rows.length === 0) {
+      return [];
+    }
+    try {
+      return await rows.map(async (row: any) => {
+        const profile = await this.getUserProfile(
+          row.user1Email === email ? row.user2Email : row.user1Email
+        );
+        return profile?.matchProfile as MatchProfile;
+      });
+    } catch (error: any) {
+      console.error(`Error getting matches: ${error.message}`);
+      return [];
+    }
+  }
+
+  async getUnlikedProfiles(email: string): Promise<ShortProfile[]> {
+    const [rows] = await this.executeQuery(
+      "get_unliked_profiles",
+      "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM `like` WHERE likerEmail = ?)",
+      [email, email]
+    );
+    if (rows.length === 0) {
+      return [];
+    }
+    try {
+      return rows.map((row: any) => {
+        return new Profile(
+          row.email,
+          row.dogName,
+          row.breed,
+          row.description,
+          row.ownerName,
+          row.imageLink
+        ).shortProfile as ShortProfile;
+      });
+    } catch (error: any) {
+      console.error(`Error getting unliked profiles: ${error.message}`);
+      return [];
+    }
   }
 }

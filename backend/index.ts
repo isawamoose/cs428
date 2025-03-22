@@ -128,6 +128,37 @@ secureApiRouter.delete("/logout", async (req, res) => {
   res.send("Logged out successfully");
 });
 
+// Get unliked profiles
+secureApiRouter.get("/unliked", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  try {
+    const unlikedProfiles = await matchService.getUnlikedProfiles(email);
+    res.status(200).send(unlikedProfiles);
+  } catch (error) {
+    res.status(500).send("Server error while fetching unliked profiles");
+  }
+});
+
+// Get matches
+secureApiRouter.get("/matches", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  try {
+    const matches = await matchService.getMatches(email);
+    res.status(200).send(matches);
+  } catch (error) {
+    res.status(500).send("Server error while fetching matches");
+  }
+});
+
+// Add a like
 secureApiRouter.post("/like", async (req, res) => {
   const { liker, likee } = req.body;
 
