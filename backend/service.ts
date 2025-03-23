@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
-import { Profile, MatchProfile } from "../shared/Profile";
+import { MatchProfile, Profile } from "../shared/Profile";
 import { MatchService } from "./service/matchService";
 
 declare global {
@@ -151,7 +151,7 @@ secureApiRouter.get("/matches", async (req, res) => {
     return;
   }
   try {
-    const matches = await matchService.getMatches(email);
+    const matches: MatchProfile[] = await matchService.getMatches(email);
     res.status(200).send(matches);
   } catch (error) {
     res.status(500).send("Server error while fetching matches");

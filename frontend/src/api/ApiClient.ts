@@ -1,4 +1,4 @@
-import { Profile, ProfileObject } from "@shared/Profile";
+import { MatchProfile, Profile, ProfileObject } from "@shared/Profile";
 import { ApiRequest } from "./Request";
 
 class ApiClient {
@@ -37,6 +37,14 @@ class ApiClient {
 
   async deleteAccount(): Promise<void> {
     await this.apiRequest.request("profile", "DELETE");
+  }
+
+  async getMatchedProfiles(): Promise<MatchProfile[]> {
+    const response: MatchProfile[] = (await this.apiRequest.request(
+      "matches",
+      "GET"
+    )) as MatchProfile[];
+    return response;
   }
 }
 

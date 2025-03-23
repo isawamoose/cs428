@@ -15,7 +15,6 @@ const ProfileView = () => {
   const [profile, setProfile] = useState<Profile | MatchProfile | null>();
 
   useEffect(() => {
-    console.log(email);
     if (email) {
       setProfile(MatchService.instance.getUser(email));
     } else {
