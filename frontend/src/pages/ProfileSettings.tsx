@@ -50,7 +50,7 @@ const ProfileSettings = (props: Props) => {
           <p>Edit Profile</p>
           <LuChevronRight />
         </Link>
-        <Link to={"/app"}>
+        <Link to={"/app/settings/view-profile"}>
           <p>Display</p>
           <LuChevronRight />
         </Link>
