@@ -15,10 +15,8 @@ export interface ShortProfile {
   imageLink: string;
 }
 
-export interface MatchProfile {
-  dogName: string;
+export interface MatchProfile extends ShortProfile {
   email: string;
-  imageLink: string;
 }
 
 export class Profile {
@@ -81,9 +79,8 @@ export class Profile {
 
   get matchProfile(): MatchProfile {
     return {
-      dogName: this.dogName,
+      ...this.shortProfile,
       email: this.email,
-      imageLink: this.imageLink,
     };
   }
 
