@@ -24,20 +24,31 @@ const Register = (props: Props) => {
   const [dogBreed, setDogBreed] = useState("");
   const [dogTraits, setDogTraits] = useState<string[]>([]);
   const [newTrait, setNewTrait] = useState("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dogPhoto, setDogPhoto] = useState<string | null>("fakePhotoURL");
+  const [file, setFile] = useState<File | null>(null);
+  const [dogPhoto, setDogPhoto] = useState<string>(cam);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
       const service = new UserService();
+
+      if (!file) {
+        alert('Unable to find image, please select a file first.');
+        return;
+      }
+      
+      // Would be nice if we could do this after we verify the email isn't already in use. 
+      // Currently this will override any existing photo.
+      // But that's a problem for later.
+      const photoURL = await service.uploadPhoto(file, email)
+
       const newProfile = new Profile(
         email,
         dogName,
         dogBreed,
         dogTraits.join(", "),
         `${ownerFirstName} ${ownerLastName}`,
-        dogPhoto || ""
+        photoURL || ""
       );
 
       const user = await service.register(newProfile, password, props.setUser);
@@ -48,8 +59,8 @@ const Register = (props: Props) => {
 
       navigate("/app");
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error: unknown) {
+    } catch (error) {
+      console.error((error as Error).message);
       alert("Register failed. Invalid information");
     }
   };
@@ -77,10 +88,11 @@ const Register = (props: Props) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      //reader.onloadend = () => {
-      //setDogPhoto(reader.result as string); // Convert file to base64 URL
-      //};
+      reader.onloadend = () => {
+        setDogPhoto(reader.result as string); // Convert file to base64 URL
+      };
       reader.readAsDataURL(file);
+      setFile(file);
     }
   };
 
