@@ -4,6 +4,7 @@ import { UserService } from "../services/UserService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LuChevronLeft } from "react-icons/lu";
+import DogBreed from "../components/DogBreedInput/DogBreed";
 
 interface Props {
   user: Profile;
@@ -68,12 +69,7 @@ const EditProfile = (props: Props) => {
 
           <div>
             <h2>Dog's Breed</h2>
-            <input
-              type="text"
-              value={breed}
-              onChange={(e) => setBreed(e.target.value)}
-              placeholder="Enter breed"
-            />
+            <DogBreed dogBreed={breed} setDogBreed={setBreed} />
           </div>
 
           <div>
