@@ -48,7 +48,7 @@ const Register = (props: Props) => {
         dogBreed,
         dogTraits.join(", "),
         `${ownerFirstName} ${ownerLastName}`,
-        photoURL || ""
+        photoURL
       );
 
       const user = await service.register(newProfile, password, props.setUser);
