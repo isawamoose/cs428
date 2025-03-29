@@ -29,6 +29,7 @@ export class MatchService {
   }
 
   async getMatches(email: string): Promise<Profile[]> {
-    return await this.db.getMatches(email);
+    const matches = await this.db.getMatches(email);
+    return matches;
   }
 }

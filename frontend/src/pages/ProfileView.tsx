@@ -15,12 +15,16 @@ const ProfileView = () => {
   const [profile, setProfile] = useState<Profile | null>();
 
   useEffect(() => {
+    fetchUserInfo();
+  }, [email]);
+
+  async function fetchUserInfo() {
     if (email) {
-      setProfile(MatchService.instance.getUser(email));
+      MatchService.instance.getUser(email).then((p) => setProfile(p));
     } else {
       userService.getProfile().then((p) => setProfile(p));
     }
-  }, [email]);
+  }
 
   if (profile) {
     return (
@@ -69,7 +73,7 @@ const ProfileView = () => {
         }}
       >
         <h1 style={{ textAlign: "center", color: "#038eff", padding: "1rem" }}>
-          Sorry, we count't find this profile
+          Sorry, we couldn't find this profile.
         </h1>
         <Link
           to="/app"

@@ -42,7 +42,10 @@ export class MatchService {
     return this.matchedUsers;
   }
 
-  public getUser(email: string | undefined): Profile | null {
+  public async getUser(email: string | undefined): Promise<Profile | null> {
+    if (!this.matchedUsers.length) {
+      await this.getMatchedProfiles(); // Fetch matched profiles if empty
+    }
     return this.matchedUsers.find((profile) => profile.email === email) || null;
   }
 

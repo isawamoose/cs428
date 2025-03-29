@@ -279,12 +279,15 @@ export class Database {
       return [];
     }
     try {
-      return await rows.map(async (row: any) => {
-        const profile = await this.getUserProfile(
-          row.user1Email === email ? row.user2Email : row.user1Email
-        );
-        return profile;
-      });
+      const matches: Profile[] = await Promise.all(
+        rows.map(async (row: any) => {
+          const profile = await this.getUserProfile(
+            row.user1Email === email ? row.user2Email : row.user1Email
+          );
+          return profile;
+        })
+      );
+      return matches;
     } catch (error: any) {
       console.error(`Error getting matches: ${error.message}`);
       return [];
