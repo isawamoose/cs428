@@ -8,9 +8,9 @@ export class MatchService {
     this.db = db;
   }
 
-  async getUnlikedProfiles(email: string): Promise<Profile[]> {
-    const unlikedProfiles = await this.db.getUnlikedProfiles(email);
-    return unlikedProfiles;
+  async getUnvotedProfiles(email: string): Promise<Profile[]> {
+    const unvotedProfiles = await this.db.getUnvotedProfiles(email);
+    return unvotedProfiles;
   }
 
   //   Add a like to the like table and return true if that like results in a match
@@ -18,6 +18,14 @@ export class MatchService {
     const addLikeSuccess = await this.db.addLike(likerEmail, likeeEmail);
     if (!addLikeSuccess) throw new Error("Could not add like to likers table");
     return await this.db.checkMatchAndAdd(likerEmail, likeeEmail);
+  }
+
+  //   Add a dislike to the like table
+  async dislike(likerEmail: string, likeeEmail: string): Promise<boolean> {
+    const addDislikeSuccess = await this.db.addDislike(likerEmail, likeeEmail);
+    if (!addDislikeSuccess)
+      throw new Error("Could not add dislike to likers table");
+    return true;
   }
 
   async getMatches(email: string): Promise<Profile[]> {

@@ -136,7 +136,7 @@ secureApiRouter.get("/unliked", async (req, res) => {
     return;
   }
   try {
-    const unlikedProfiles: Profile[] = await matchService.getUnlikedProfiles(
+    const unlikedProfiles: Profile[] = await matchService.getUnvotedProfiles(
       email
     );
     res.status(200).send(unlikedProfiles);
@@ -178,6 +178,26 @@ secureApiRouter.post("/like", async (req, res) => {
     res.status(200).send(isMatch);
   } catch (error) {
     res.status(500).send("Server error while trying to add like");
+  }
+});
+
+// Add a dislike
+secureApiRouter.post("/dislike", async (req, res) => {
+  const { likeeEmail } = req.body;
+  const likerEmail = req.email;
+  if (!likerEmail) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  if (!likeeEmail) {
+    res.status(400).send("Missing likee");
+    return;
+  }
+  try {
+    await matchService.dislike(likerEmail, likeeEmail);
+    res.status(200).send("Disliked successfully");
+  } catch (error) {
+    res.status(500).send("Server error while trying to add dislike");
   }
 });
 

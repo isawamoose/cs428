@@ -221,10 +221,20 @@ export class Database {
   // checkMatchAndAdd checks if the vote results in a match and adds it to the match table
   // addMatch adds a match to the match table
 
+  // likeType: 1 for like, 0 for dislike
   async addLike(likerEmail: string, likeeEmail: string): Promise<boolean> {
     const [rows] = await this.executeQuery(
       "add_like",
-      "INSERT INTO vote (likerEmail, likeeEmail) VALUES (?, ?)",
+      "INSERT INTO vote (likerEmail, likeeEmail, likeType) VALUES (?, ?, 1)",
+      [likerEmail, likeeEmail]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async addDislike(likerEmail: string, likeeEmail: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_dislike",
+      "INSERT INTO vote (likerEmail, likeeEmail, likeType) VALUES (?, ?, 0)",
       [likerEmail, likeeEmail]
     );
     return rows && rows.affectedRows === 1;
@@ -248,7 +258,7 @@ export class Database {
     // If not, return false
     const [rows] = await this.executeQuery(
       "check_match",
-      "SELECT COUNT(*) AS count FROM vote WHERE likerEmail = ? AND likeeEmail = ?",
+      "SELECT COUNT(*) as count FROM vote WHERE likerEmail = ? AND likeeEmail = ? AND likeType = 1",
       [likeeEmail, likerEmail]
     );
     const count = rows[0].count;
@@ -281,7 +291,7 @@ export class Database {
     }
   }
 
-  async getUnlikedProfiles(email: string): Promise<Profile[]> {
+  async getUnvotedProfiles(email: string): Promise<Profile[]> {
     const [rows] = await this.executeQuery(
       "get_unliked_profiles",
       "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM vote WHERE likerEmail = ?)",
@@ -302,7 +312,7 @@ export class Database {
         );
       });
     } catch (error: any) {
-      console.error(`Error getting unliked profiles: ${error.message}`);
+      console.error(`Error getting unvoted profiles: ${error.message}`);
       return [];
     }
   }

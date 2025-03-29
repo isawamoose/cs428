@@ -27,6 +27,7 @@ export const tableCreateStatements = [
     id INT AUTO_INCREMENT PRIMARY KEY,
     likerEmail VARCHAR(255) NOT NULL,
     likeeEmail VARCHAR(255) NOT NULL,
+    likeType TINYINT(1) NOT NULL DEFAULT 1,
     FOREIGN KEY (likerEmail) REFERENCES user(email),
     FOREIGN KEY (likeeEmail) REFERENCES user(email),
     INDEX idx_likerEmail (likerEmail)
