@@ -4,6 +4,7 @@ import "./Home.css";
 import { MatchService } from "../services/MatchService";
 import { useNavigate } from "react-router-dom";
 import { Profile } from "@shared/Profile";
+import noImage from "../assets/noImage.png"; // Placeholder image for when the profile image fails to load
 
 interface Props {
   user: Profile | null;
@@ -77,6 +78,9 @@ const Home = (props: Props) => {
             src={displayedUser.imageLink}
             alt={`${displayedUser.breed} named ${displayedUser.dogName}`}
             className="match-profile-img"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = noImage; // Fallback to placeholder image if the original fails to load
+            }}
           />
           <div className="match-btn-container">
             <div

@@ -5,6 +5,7 @@ import { MatchService } from "../services/MatchService";
 import { UserService } from "../services/UserService";
 import "../pages/Home.css";
 // Imported Home.css because this page has very similar styles
+import noImage from "../assets/noImage.png"; // Placeholder image for when the profile image fails to load
 
 const ProfileView = () => {
   // if the path is "/app/user/:email" -- use the email to find the user
@@ -39,6 +40,9 @@ const ProfileView = () => {
             src={profile?.imageLink}
             alt={`${profile?.breed} named ${profile?.dogName}`}
             className="match-profile-img"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = noImage; // Fallback to placeholder image if the original fails to load
+            }}
           />
         </div>
 
