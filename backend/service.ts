@@ -175,7 +175,7 @@ secureApiRouter.post("/like", async (req, res) => {
   }
   try {
     const isMatch: boolean = await matchService.like(likerEmail, likeeEmail);
-    res.status(200).send(isMatch);
+    res.status(200).send({ isMatch });
   } catch (error) {
     res.status(500).send("Server error while trying to add like");
   }

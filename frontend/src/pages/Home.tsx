@@ -27,7 +27,7 @@ const Home = (props: Props) => {
   }, []);
 
   const handleLike = async () => {
-    const [isMatch, email] = await matchService.match(displayedUser!);
+    const [isMatch, email] = await matchService.like(displayedUser!);
     if (isMatch) {
       setEmail(email);
       dialogRef.current?.showModal();

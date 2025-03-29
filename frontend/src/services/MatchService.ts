@@ -20,13 +20,11 @@ export class MatchService {
   public async getUnlikedProfiles(): Promise<Profile[]> {
     const unlikedProfiles = await apiClient.getUnlikedProfiles();
     this.unlikedProfiles = unlikedProfiles;
-    console.log("Unliked profiles:", this.unlikedProfiles);
     this.matchIndex = 0; // Reset index for new unliked profiles
     return this.unlikedProfiles;
   }
 
-  public async match(otherUser: Profile): Promise<[boolean, string]> {
-    console.log("Attempting to match with:", otherUser);
+  public async like(otherUser: Profile): Promise<[boolean, string]> {
     const isMatch = await apiClient.like(otherUser.email);
     let email = "";
 
@@ -52,12 +50,10 @@ export class MatchService {
     if (!this.unlikedProfiles.length) {
       await this.getUnlikedProfiles(); // Fetch unliked profiles if empty
     }
-    if (this.matchIndex < this.unlikedProfiles.length - 1) {
+    if (this.unlikedProfiles.length) {
       const nextUser = this.unlikedProfiles[this.matchIndex];
-      this.matchIndex++;
+      this.matchIndex = (this.matchIndex + 1) % this.unlikedProfiles.length; // Increment and wrap around
       return nextUser;
-    } else {
-      this.matchIndex = 0; // Reset index if no more users
     }
     return null;
   }
