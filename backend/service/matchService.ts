@@ -1,4 +1,4 @@
-import { MatchProfile, ShortProfile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 import { Database } from "../database/Database";
 
 export class MatchService {
@@ -8,8 +8,9 @@ export class MatchService {
     this.db = db;
   }
 
-  async getUnlikedProfiles(email: string): Promise<ShortProfile[]> {
-    return await this.db.getUnlikedProfiles(email);
+  async getUnlikedProfiles(email: string): Promise<Profile[]> {
+    const unlikedProfiles = await this.db.getUnlikedProfiles(email);
+    return unlikedProfiles;
   }
 
   //   Add a like to the like table and return true if that like results in a match
@@ -19,7 +20,7 @@ export class MatchService {
     return await this.db.checkMatchAndAdd(likerEmail, likeeEmail);
   }
 
-  async getMatches(email: string): Promise<MatchProfile[]> {
+  async getMatches(email: string): Promise<Profile[]> {
     return await this.db.getMatches(email);
   }
 }

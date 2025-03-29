@@ -2,7 +2,7 @@ import mysql from "mysql2/promise";
 import { config } from "../config";
 import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
-import { MatchProfile, Profile, ShortProfile } from "../../shared/Profile";
+import { Profile } from "../../shared/Profile";
 
 export class Database {
   private initialized: Promise<void>;
@@ -259,7 +259,7 @@ export class Database {
     } else throw new Error("Error checking / adding match");
   }
 
-  async getMatches(email: string): Promise<MatchProfile[]> {
+  async getMatches(email: string): Promise<Profile[]> {
     const [rows] = await this.executeQuery(
       "get_matches",
       "SELECT user1Email, user2Email FROM dog_match WHERE user1Email = ? OR user2Email = ?",
@@ -273,7 +273,7 @@ export class Database {
         const profile = await this.getUserProfile(
           row.user1Email === email ? row.user2Email : row.user1Email
         );
-        return profile?.matchProfile as MatchProfile;
+        return profile;
       });
     } catch (error: any) {
       console.error(`Error getting matches: ${error.message}`);
@@ -281,7 +281,7 @@ export class Database {
     }
   }
 
-  async getUnlikedProfiles(email: string): Promise<ShortProfile[]> {
+  async getUnlikedProfiles(email: string): Promise<Profile[]> {
     const [rows] = await this.executeQuery(
       "get_unliked_profiles",
       "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM vote WHERE likerEmail = ?)",
@@ -299,7 +299,7 @@ export class Database {
           row.description,
           row.ownerName,
           row.imageLink
-        ).shortProfile as ShortProfile;
+        );
       });
     } catch (error: any) {
       console.error(`Error getting unliked profiles: ${error.message}`);

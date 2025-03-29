@@ -7,18 +7,6 @@ export interface ProfileObject {
   _imageLink: string;
 }
 
-export interface ShortProfile {
-  dogName: string;
-  breed: string;
-  description: string;
-  ownerName: string;
-  imageLink: string;
-}
-
-export interface MatchProfile extends ShortProfile {
-  email: string;
-}
-
 export class Profile {
   private _email: string;
   private _dogName: string;
@@ -65,23 +53,6 @@ export class Profile {
 
   get imageLink(): string {
     return this._imageLink;
-  }
-
-  get shortProfile(): ShortProfile {
-    return {
-      dogName: this._dogName,
-      breed: this.breed,
-      description: this.description,
-      ownerName: this.ownerName,
-      imageLink: this.imageLink,
-    };
-  }
-
-  get matchProfile(): MatchProfile {
-    return {
-      ...this.shortProfile,
-      email: this.email,
-    };
   }
 
   static fromObject(obj: ProfileObject): Profile {

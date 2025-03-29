@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
-import { MatchProfile, Profile } from "../shared/Profile";
+import { Profile } from "../shared/Profile";
 import { MatchService } from "./service/matchService";
 
 declare global {
@@ -90,7 +90,7 @@ secureApiRouter.get("/profile", async (req, res) => {
     res.status(401).send("Unauthorized");
     return;
   }
-  const profile = await userService.getUserProfile(email);
+  const profile: Profile | null = await userService.getUserProfile(email);
   if (profile) {
     res.send(profile);
   } else {
@@ -136,7 +136,9 @@ secureApiRouter.get("/unliked", async (req, res) => {
     return;
   }
   try {
-    const unlikedProfiles = await matchService.getUnlikedProfiles(email);
+    const unlikedProfiles: Profile[] = await matchService.getUnlikedProfiles(
+      email
+    );
     res.status(200).send(unlikedProfiles);
   } catch (error) {
     res.status(500).send("Server error while fetching unliked profiles");
@@ -151,7 +153,7 @@ secureApiRouter.get("/matches", async (req, res) => {
     return;
   }
   try {
-    const matches: MatchProfile[] = await matchService.getMatches(email);
+    const matches: Profile[] = await matchService.getMatches(email);
     res.status(200).send(matches);
   } catch (error) {
     res.status(500).send("Server error while fetching matches");
@@ -160,14 +162,19 @@ secureApiRouter.get("/matches", async (req, res) => {
 
 // Add a like
 secureApiRouter.post("/like", async (req, res) => {
-  const { liker, likee } = req.body;
+  const { likeeEmail } = req.body;
+  const likerEmail = req.email;
+  if (!likerEmail) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
 
-  if (!liker || !likee) {
-    res.status(400).send("Missing liker or likee");
+  if (!likeeEmail) {
+    res.status(400).send("Missing likee");
     return;
   }
   try {
-    const isMatch: boolean = await matchService.like(liker, likee);
+    const isMatch: boolean = await matchService.like(likerEmail, likeeEmail);
     res.status(200).send(isMatch);
   } catch (error) {
     res.status(500).send("Server error while trying to add like");

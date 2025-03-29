@@ -1,4 +1,4 @@
-import { MatchProfile, Profile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MatchService } from "../services/MatchService";
@@ -12,7 +12,7 @@ const ProfileView = () => {
 
   const { email } = useParams();
   const [userService] = useState<UserService>(new UserService());
-  const [profile, setProfile] = useState<Profile | MatchProfile | null>();
+  const [profile, setProfile] = useState<Profile | null>();
 
   useEffect(() => {
     if (email) {

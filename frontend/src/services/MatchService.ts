@@ -1,10 +1,11 @@
-import { ShortProfile, MatchProfile } from "@shared/Profile";
-import { FakeData } from "@shared/util/FakeData";
-import { apiClient } from "src/api/ApiClient";
+import { Profile } from "@shared/Profile";
+import { apiClient } from "../api/ApiClient";
 
 export class MatchService {
   private static _instance: MatchService;
-  private matchedUsers: MatchProfile[] = [];
+  private matchedUsers: Profile[] = [];
+  private unlikedProfiles: Profile[] = [];
+  private matchIndex = 0;
 
   // Singleton instance
   public static get instance(): MatchService {
@@ -16,36 +17,48 @@ export class MatchService {
 
   private constructor() {}
 
-  public async getUnlikedProfiles(): Promise<ShortProfile> {
-    const newUser = FakeData.instance.getRandomUser();
-    return newUser;
+  public async getUnlikedProfiles(): Promise<Profile[]> {
+    const unlikedProfiles = await apiClient.getUnlikedProfiles();
+    this.unlikedProfiles = unlikedProfiles;
+    console.log("Unliked profiles:", this.unlikedProfiles);
+    this.matchIndex = 0; // Reset index for new unliked profiles
+    return this.unlikedProfiles;
   }
 
-  public async match(otherUser: ShortProfile): Promise<[boolean, string]> {
-    const isMatch = Math.random() > 0.75;
+  public async match(otherUser: Profile): Promise<[boolean, string]> {
+    console.log("Attempting to match with:", otherUser);
+    const isMatch = await apiClient.like(otherUser.email);
     let email = "";
 
     if (isMatch) {
-      // This is kinda hacky
-      // Once this functionality exists on the backend, we should send the short profile and get the match profile back
-      const matchProfile = FakeData.instance.getFakeUsers().find((profile) => {
-        return (
-          JSON.stringify(otherUser) == JSON.stringify(profile.shortProfile)
-        );
-      })!.matchProfile;
-
-      this.matchedUsers.push(matchProfile);
-      email = matchProfile.email;
+      await this.getMatchedProfiles(); // Refresh matched profiles
+      email = otherUser.email;
     }
 
     return [isMatch, email];
   }
 
-  public async getMatchedUsers(): Promise<MatchProfile[]> {
-    return await apiClient.getMatchedProfiles();
+  public async getMatchedProfiles(): Promise<Profile[]> {
+    const matchedProfiles = await apiClient.getMatchedProfiles();
+    this.matchedUsers = matchedProfiles;
+    return this.matchedUsers;
   }
 
-  public getUser(email: string | undefined): MatchProfile | null {
+  public getUser(email: string | undefined): Profile | null {
     return this.matchedUsers.find((profile) => profile.email === email) || null;
+  }
+
+  public async getNextUser(): Promise<Profile | null> {
+    if (!this.unlikedProfiles.length) {
+      await this.getUnlikedProfiles(); // Fetch unliked profiles if empty
+    }
+    if (this.matchIndex < this.unlikedProfiles.length - 1) {
+      const nextUser = this.unlikedProfiles[this.matchIndex];
+      this.matchIndex++;
+      return nextUser;
+    } else {
+      this.matchIndex = 0; // Reset index if no more users
+    }
+    return null;
   }
 }

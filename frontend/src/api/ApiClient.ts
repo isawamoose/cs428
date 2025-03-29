@@ -1,4 +1,4 @@
-import { MatchProfile, Profile, ProfileObject } from "@shared/Profile";
+import { Profile, ProfileObject } from "@shared/Profile";
 import { ApiRequest } from "./Request";
 
 class ApiClient {
@@ -39,12 +39,30 @@ class ApiClient {
     await this.apiRequest.request("profile", "DELETE");
   }
 
-  async getMatchedProfiles(): Promise<MatchProfile[]> {
-    const response: MatchProfile[] = (await this.apiRequest.request(
+  async getMatchedProfiles(): Promise<Profile[]> {
+    const response: ProfileObject[] = (await this.apiRequest.request(
       "matches",
       "GET"
-    )) as MatchProfile[];
-    return response;
+    )) as ProfileObject[];
+    return response.map((profileObj) => Profile.fromObject(profileObj));
+  }
+
+  async getUnlikedProfiles(): Promise<Profile[]> {
+    const response: ProfileObject[] = (await this.apiRequest.request(
+      "unliked",
+      "GET"
+    )) as ProfileObject[];
+    return response.map((profileObj) => Profile.fromObject(profileObj));
+  }
+
+  async like(likeeEmail: string): Promise<boolean> {
+    const body = { likeeEmail };
+    const response: { isMatch: boolean } = (await this.apiRequest.request(
+      "like",
+      "POST",
+      body
+    )) as { isMatch: boolean };
+    return response.isMatch;
   }
 }
 

@@ -3,22 +3,22 @@ import { LuBone, LuThumbsDown } from "react-icons/lu";
 import "./Home.css";
 import { MatchService } from "../services/MatchService";
 import { useNavigate } from "react-router-dom";
-import { Profile, ShortProfile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 
 interface Props {
   user: Profile | null;
 }
 
 const Home = (props: Props) => {
-  const [displayedUser, setDisplayedUser] = useState<ShortProfile | null>(null);
+  const [displayedUser, setDisplayedUser] = useState<Profile | null>(null);
   //const [matchService] = useState(new MatchService());
   const matchService = MatchService.instance;
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
   const getNewUser = async () => {
-    const userToDisplay = await matchService.getUnmatchedUser();
+    const userToDisplay: Profile | null = await matchService.getNextUser();
     setDisplayedUser(userToDisplay);
   };
 
@@ -29,7 +29,7 @@ const Home = (props: Props) => {
   const handleLike = async () => {
     const [isMatch, email] = await matchService.match(displayedUser!);
     if (isMatch) {
-      setEmail(email)
+      setEmail(email);
       dialogRef.current?.showModal();
     } else {
       await getNewUser();

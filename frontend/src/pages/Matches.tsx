@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { MatchService } from "../services/MatchService";
-import { MatchProfile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 import "./Matches.css";
 import { useNavigate } from "react-router-dom";
 
 const Matches = () => {
-  const [matchedUsers, setMatchedUsers] = useState<MatchProfile[]>([]);
+  const [matchedUsers, setMatchedUsers] = useState<Profile[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMatchedUsers = async () => {
-      const users = await MatchService.instance.getMatchedUsers();
+      const users = await MatchService.instance.getMatchedProfiles();
       setMatchedUsers(users);
 
       console.log(`Total matched users: ${users.length}`);
