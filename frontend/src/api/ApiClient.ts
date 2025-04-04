@@ -38,6 +38,37 @@ class ApiClient {
   async deleteAccount(): Promise<void> {
     await this.apiRequest.request("profile", "DELETE");
   }
+
+  async getMatchedProfiles(): Promise<Profile[]> {
+    const response: ProfileObject[] = (await this.apiRequest.request(
+      "matches",
+      "GET"
+    )) as ProfileObject[];
+    return response.map((profileObj) => Profile.fromObject(profileObj));
+  }
+
+  async getUnvotedProfiles(): Promise<Profile[]> {
+    const response: ProfileObject[] = (await this.apiRequest.request(
+      "unvoted",
+      "GET"
+    )) as ProfileObject[];
+    return response.map((profileObj) => Profile.fromObject(profileObj));
+  }
+
+  async like(likeeEmail: string): Promise<boolean> {
+    const body = { likeeEmail };
+    const response: { isMatch: boolean } = (await this.apiRequest.request(
+      "like",
+      "POST",
+      body
+    )) as { isMatch: boolean };
+    return response.isMatch;
+  }
+
+  async dislike(dislikeeEmail: string): Promise<void> {
+    const body = { dislikeeEmail };
+    await this.apiRequest.request("dislike", "POST", body);
+  }
 }
 
 const apiClient = new ApiClient();

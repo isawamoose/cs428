@@ -4,6 +4,7 @@ import { UserService } from "./service/userService";
 import cookieParser from "cookie-parser";
 import { Database } from "./database/Database";
 import { Profile } from "../shared/Profile";
+import { MatchService } from "./service/matchService";
 
 declare global {
   namespace Express {
@@ -16,6 +17,7 @@ declare global {
 const app = express();
 const db = new Database();
 const userService = new UserService(db);
+const matchService = new MatchService(db);
 
 const AUTH_COOKIE_NAME = "token";
 app.use(cookieParser());
@@ -51,7 +53,8 @@ apiRouter.put("/login", async (req, res) => {
   const password = req.body.password;
   const token = await userService.login(email, password);
   if (token) {
-    res.cookie(AUTH_COOKIE_NAME, token).send("Logged in successfully");
+    res.cookie(AUTH_COOKIE_NAME, token, { secure: true, sameSite: "none" });
+    res.send("Logged in successfully");
   } else {
     res.status(401).send("Invalid email or password");
   }
@@ -87,7 +90,7 @@ secureApiRouter.get("/profile", async (req, res) => {
     res.status(401).send("Unauthorized");
     return;
   }
-  const profile = await userService.getUserProfile(email);
+  const profile: Profile | null = await userService.getUserProfile(email);
   if (profile) {
     res.send(profile);
   } else {
@@ -113,22 +116,6 @@ secureApiRouter.put("/profile", async (req, res) => {
   }
 });
 
-// Delete user profile
-secureApiRouter.delete("/profile", async (req, res) => {
-  const email = req.email;
-  if (!email) {
-    res.status(401).send("Unauthorized");
-    return;
-  }
-  const success = await userService.deleteUserProfile(email);
-  if (success) {
-    res.clearCookie(AUTH_COOKIE_NAME);
-    res.send("Profile deleted successfully");
-  } else {
-    res.status(400).send("Failed to delete profile");
-  }
-});
-
 // Logout
 secureApiRouter.delete("/logout", async (req, res) => {
   const email = req.email;
@@ -139,6 +126,79 @@ secureApiRouter.delete("/logout", async (req, res) => {
   await userService.logout(email);
   res.clearCookie(AUTH_COOKIE_NAME);
   res.send("Logged out successfully");
+});
+
+// Get unvoted profiles
+secureApiRouter.get("/unvoted", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  try {
+    const unvotedProfiles: Profile[] = await matchService.getUnvotedProfiles(
+      email
+    );
+    res.status(200).send(unvotedProfiles);
+  } catch (error) {
+    res.status(500).send("Server error while fetching unvoted profiles");
+  }
+});
+
+// Get matches
+secureApiRouter.get("/matches", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  try {
+    const matches: Profile[] = await matchService.getMatches(email);
+    res.status(200).send(matches);
+  } catch (error) {
+    res.status(500).send("Server error while fetching matches");
+  }
+});
+
+// Add a like
+secureApiRouter.post("/like", async (req, res) => {
+  const { likeeEmail } = req.body;
+  const likerEmail = req.email;
+  if (!likerEmail) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  if (!likeeEmail) {
+    res.status(400).send("Missing likee");
+    return;
+  }
+  try {
+    const isMatch: boolean = await matchService.like(likerEmail, likeeEmail);
+    res.status(200).send({ isMatch });
+  } catch (error) {
+    res.status(500).send("Server error while trying to add like");
+  }
+});
+
+// Add a dislike
+secureApiRouter.post("/dislike", async (req, res) => {
+  const { dislikeeEmail } = req.body;
+  const dislikerEmail = req.email;
+  if (!dislikerEmail) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  if (!dislikeeEmail) {
+    res.status(400).send("Missing likee");
+    return;
+  }
+  try {
+    await matchService.dislike(dislikerEmail, dislikeeEmail);
+    res.status(200).send("Disliked successfully");
+  } catch (error) {
+    res.status(500).send("Server error while trying to add dislike");
+  }
 });
 
 // Return default message if the path is unknown
