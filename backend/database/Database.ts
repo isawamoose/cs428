@@ -215,4 +215,108 @@ export class Database {
     );
     return rows && rows.affectedRows === 1;
   }
+
+  // Match and vote tables
+  // addLike adds a vote to the vote table and returns true if it results in a match
+  // checkMatchAndAdd checks if the vote results in a match and adds it to the match table
+  // addMatch adds a match to the match table
+
+  // likeType: 1 for like, 0 for dislike
+  async addLike(likerEmail: string, likeeEmail: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_like",
+      "INSERT INTO vote (likerEmail, likeeEmail, likeType) VALUES (?, ?, 1)",
+      [likerEmail, likeeEmail]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async addDislike(likerEmail: string, likeeEmail: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_dislike",
+      "INSERT INTO vote (likerEmail, likeeEmail, likeType) VALUES (?, ?, 0)",
+      [likerEmail, likeeEmail]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async addMatch(user1Email: string, user2Email: string): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "add_match",
+      "INSERT INTO dog_match (user1Email, user2Email) VALUES (?, ?)",
+      [user1Email, user2Email]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async checkMatchAndAdd(
+    likerEmail: string,
+    likeeEmail: string
+  ): Promise<boolean> {
+    // Check if likee has already liked the liker
+    // If so, add a match to the match table and return true
+    // If not, return false
+    const [rows] = await this.executeQuery(
+      "check_match",
+      "SELECT COUNT(*) as count FROM vote WHERE likerEmail = ? AND likeeEmail = ? AND likeType = 1",
+      [likeeEmail, likerEmail]
+    );
+    const count = rows[0].count;
+    if (count == 0) return false;
+    else if (count > 0) {
+      await this.addMatch(likerEmail, likeeEmail);
+      return true;
+    } else throw new Error("Error checking / adding match");
+  }
+
+  async getMatches(email: string): Promise<Profile[]> {
+    const [rows] = await this.executeQuery(
+      "get_matches",
+      "SELECT user1Email, user2Email FROM dog_match WHERE user1Email = ? OR user2Email = ?",
+      [email, email]
+    );
+    if (rows.length === 0) {
+      return [];
+    }
+    try {
+      const matches: Profile[] = await Promise.all(
+        rows.map(async (row: any) => {
+          const profile = await this.getUserProfile(
+            row.user1Email === email ? row.user2Email : row.user1Email
+          );
+          return profile;
+        })
+      );
+      return matches;
+    } catch (error: any) {
+      console.error(`Error getting matches: ${error.message}`);
+      return [];
+    }
+  }
+
+  async getUnvotedProfiles(email: string): Promise<Profile[]> {
+    const [rows] = await this.executeQuery(
+      "get_unliked_profiles",
+      "SELECT * FROM user WHERE email != ? AND email NOT IN (SELECT likeeEmail FROM vote WHERE likerEmail = ?)",
+      [email, email]
+    );
+    if (rows.length === 0) {
+      return [];
+    }
+    try {
+      return rows.map((row: any) => {
+        return new Profile(
+          row.email,
+          row.dogName,
+          row.breed,
+          row.description,
+          row.ownerName,
+          row.imageLink
+        );
+      });
+    } catch (error: any) {
+      console.error(`Error getting unvoted profiles: ${error.message}`);
+      return [];
+    }
+  }
 }

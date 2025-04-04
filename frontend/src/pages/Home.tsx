@@ -3,22 +3,22 @@ import { LuBone, LuThumbsDown } from "react-icons/lu";
 import "./Home.css";
 import { MatchService } from "../services/MatchService";
 import { useNavigate } from "react-router-dom";
-import { Profile, ShortProfile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
+import noImage from "../assets/noImage.png"; // Placeholder image for when the profile image fails to load
 
 interface Props {
   user: Profile | null;
 }
 
 const Home = (props: Props) => {
-  const [displayedUser, setDisplayedUser] = useState<ShortProfile | null>(null);
-  //const [matchService] = useState(new MatchService());
+  const [displayedUser, setDisplayedUser] = useState<Profile | null>(null);
   const matchService = MatchService.instance;
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const dialogRef = useRef<null | HTMLDialogElement>(null);
   const navigate = useNavigate();
 
   const getNewUser = async () => {
-    const userToDisplay = await matchService.getUnmatchedUser();
+    const userToDisplay: Profile | null = await matchService.getNextUser();
     setDisplayedUser(userToDisplay);
   };
 
@@ -27,9 +27,9 @@ const Home = (props: Props) => {
   }, []);
 
   const handleLike = async () => {
-    const [isMatch, email] = await matchService.match(displayedUser!);
+    const [isMatch, email] = await matchService.like(displayedUser!);
     if (isMatch) {
-      setEmail(email)
+      setEmail(email);
       dialogRef.current?.showModal();
     } else {
       await getNewUser();
@@ -37,6 +37,7 @@ const Home = (props: Props) => {
   };
 
   const handleDislike = async () => {
+    await matchService.dislike(displayedUser!);
     await getNewUser();
   };
 
@@ -74,9 +75,12 @@ const Home = (props: Props) => {
         </div>
         <div className="match-profile-img-container">
           <img
-            src={displayedUser.imageLink}
+            src={displayedUser.imageLink ?? noImage}
             alt={`${displayedUser.breed} named ${displayedUser.dogName}`}
             className="match-profile-img"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = noImage; // Fallback to placeholder image if the original fails to load
+            }}
           />
           <div className="match-btn-container">
             <div
@@ -102,7 +106,11 @@ const Home = (props: Props) => {
       </div>
     );
   } else {
-    return <div className="conatainer home-page">Loading...</div>;
+    return (
+      <div className="container home-page message">
+        <h2>There are currently no users to display.</h2>
+      </div>
+    );
   }
 };
 
