@@ -86,6 +86,26 @@ export class UserService {
     }
   }
 
+  public async uploadPhoto(file: File, email: string): Promise<string> {
+    const arrayBuffer = await file.arrayBuffer();
+  
+    const response = await fetch('https://kn31xc1q6k.execute-api.us-east-1.amazonaws.com/prod/photo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type,
+        'X-User-Email': email
+      },
+      body: arrayBuffer,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.url;
+    } else {
+      throw new Error(response.statusText);
+    }
+  }
+
   //just putting this here for now, will need to connect to back end
   public async updateAccount(): Promise<void> {}
 }
