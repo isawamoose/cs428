@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MatchService } from "../services/MatchService";
 import { Profile } from "@shared/Profile";
+import ImageWithFallback from "../components/ImageWithFallback";
 
 const Messages = () => {
   //Get all the users you've matched with to display them to talk to
@@ -36,12 +37,11 @@ const Messages = () => {
                   }) //Go to conversation with selected user
               }
             >
-              <img
+              <ImageWithFallback
                 src={user.imageLink}
                 alt={`${user.dogName}'s profile`}
                 className="messages-image"
               />
-
               <div className="messages-details">
                 <div className="messages-header">
                   <h1 className="messages-name">{user.ownerName}</h1>
