@@ -1,0 +1,30 @@
+.dog-breed-container {
+  position: relative;
+}
+
+.breed-suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  position: absolute;
+  width: 100%;
+  top: 3rem;
+  z-index: 10;
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.breed-suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+}
+
+.breed-suggestion-item:hover {
+  background-color: lightgray;
+  color: white;
+}

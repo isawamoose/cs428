@@ -1,4 +1,4 @@
-import { LuHouse, LuBone, LuUser } from "react-icons/lu";
+import { LuHouse, LuBone, LuUser, LuMessageCircle } from "react-icons/lu";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
@@ -19,6 +19,10 @@ const Navbar = () => {
       <LuHouse
         color={pathname === "/app" ? "white" : "#81D3FF"}
         onClick={() => navigate("/app")}
+      />
+      <LuMessageCircle
+        color={pathname.includes("/app/messages") ? "white" : "#81D3FF"}
+        onClick={() => navigate("/app/messages")}
       />
       <LuUser
         color={pathname.includes("/app/settings") ? "white" : "#81D3FF"}

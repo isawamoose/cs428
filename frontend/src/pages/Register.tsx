@@ -4,6 +4,7 @@ import cam from "../assets/cam_plus.png";
 import check from "../assets/check.png";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
+import DogBreed from "../components/DogBreedInput/DogBreed";
 
 import { UserService } from "../services/UserService";
 import { Profile } from "@shared/Profile";
@@ -147,21 +148,7 @@ const Register = (props: Props) => {
             )}
             {/* Step 3: Dog Breed */}
             {step === 3 && (
-              <select
-                value={dogBreed}
-                onChange={(e) => setDogBreed(e.target.value)}
-                required
-              >
-                <option value="" disabled>
-                  Select dog breed
-                </option>
-                <option value="Labrador">Labrador Retriever</option>
-                <option value="French Bulldog">French Bulldog</option>
-                <option value="Golden Retriever">Golden Retriever</option>
-                <option value="Poodle">Poodle</option>
-                <option value="Bulldog">Bulldog</option>
-                <option value="German Shepherd">German Shepherd</option>
-              </select>
+              <DogBreed dogBreed={dogBreed} setDogBreed={setDogBreed} />
             )}
 
             {/* Step 4: Dog Personality */}
