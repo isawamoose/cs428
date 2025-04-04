@@ -13,9 +13,6 @@ const Matches = () => {
     const fetchMatchedUsers = async () => {
       const users = await MatchService.instance.getMatchedProfiles();
       setMatchedUsers(users);
-
-      console.log(`Total matched users: ${users.length}`);
-      console.log(users);
     };
 
     fetchMatchedUsers();
