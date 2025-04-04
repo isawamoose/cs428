@@ -2,16 +2,16 @@ import "./Messages.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MatchService } from "../services/MatchService";
-import { MatchProfile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 
 const Messages = () => {
   //Get all the users you've matched with to display them to talk to
-  const [matchedUsers, setMatchedUsers] = useState<MatchProfile[]>([]);
+  const [matchedUsers, setMatchedUsers] = useState<Profile[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMatchedUsers = async () => {
-      const users = MatchService.instance.getMatchedUsers();
+      const users = await MatchService.instance.getMatchedProfiles();
       setMatchedUsers(users);
 
       console.log(`Total matched users: ${users.length}`);
