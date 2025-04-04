@@ -12,7 +12,6 @@ interface Props {
 
 const Home = (props: Props) => {
   const [displayedUser, setDisplayedUser] = useState<Profile | null>(null);
-  //const [matchService] = useState(new MatchService());
   const matchService = MatchService.instance;
   const [email, setEmail] = useState<string>("");
   const dialogRef = useRef<null | HTMLDialogElement>(null);
@@ -38,6 +37,7 @@ const Home = (props: Props) => {
   };
 
   const handleDislike = async () => {
+    await matchService.dislike(displayedUser!);
     await getNewUser();
   };
 
@@ -75,7 +75,7 @@ const Home = (props: Props) => {
         </div>
         <div className="match-profile-img-container">
           <img
-            src={displayedUser.imageLink}
+            src={displayedUser.imageLink ?? noImage}
             alt={`${displayedUser.breed} named ${displayedUser.dogName}`}
             className="match-profile-img"
             onError={(e) => {
@@ -106,7 +106,11 @@ const Home = (props: Props) => {
       </div>
     );
   } else {
-    return <div className="conatainer home-page">Loading...</div>;
+    return (
+      <div className="container home-page message">
+        <h2>There are currently no users to display.</h2>
+      </div>
+    );
   }
 };
 

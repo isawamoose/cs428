@@ -4,7 +4,7 @@ import { apiClient } from "../api/ApiClient";
 export class MatchService {
   private static _instance: MatchService;
   private matchedUsers: Profile[] = [];
-  private unlikedProfiles: Profile[] = [];
+  private unvotedProfiles: Profile[] = [];
   private matchIndex = 0;
 
   // Singleton instance
@@ -17,11 +17,11 @@ export class MatchService {
 
   private constructor() {}
 
-  public async getUnlikedProfiles(): Promise<Profile[]> {
-    const unlikedProfiles = await apiClient.getUnlikedProfiles();
-    this.unlikedProfiles = unlikedProfiles;
+  public async getUnvotedProfiles(): Promise<Profile[]> {
+    const unvotedProfiles = await apiClient.getUnvotedProfiles();
+    this.unvotedProfiles = unvotedProfiles;
     this.matchIndex = 0; // Reset index for new unliked profiles
-    return this.unlikedProfiles;
+    return this.unvotedProfiles;
   }
 
   public async like(otherUser: Profile): Promise<[boolean, string]> {
@@ -33,7 +33,14 @@ export class MatchService {
       email = otherUser.email;
     }
 
+    await this.getUnvotedProfiles(); // Refresh unliked profiles
+
     return [isMatch, email];
+  }
+
+  public async dislike(otherUser: Profile): Promise<void> {
+    await apiClient.dislike(otherUser.email);
+    await this.getUnvotedProfiles(); // Refresh unliked profiles
   }
 
   public async getMatchedProfiles(): Promise<Profile[]> {
@@ -50,12 +57,23 @@ export class MatchService {
   }
 
   public async getNextUser(): Promise<Profile | null> {
-    if (!this.unlikedProfiles.length) {
-      await this.getUnlikedProfiles(); // Fetch unliked profiles if empty
+    if (!this.unvotedProfiles.length) {
+      await this.getUnvotedProfiles(); // Fetch unliked profiles if empty
     }
-    if (this.unlikedProfiles.length) {
-      const nextUser = this.unlikedProfiles[this.matchIndex];
-      this.matchIndex = (this.matchIndex + 1) % this.unlikedProfiles.length; // Increment and wrap around
+    if (this.unvotedProfiles.length) {
+      let nextUser = this.unvotedProfiles[this.matchIndex];
+      this.matchIndex = (this.matchIndex + 1) % this.unvotedProfiles.length; // Increment and wrap around
+      // FIXME we need a better way to handle bad images
+      if (nextUser.imageLink === "") {
+        nextUser = new Profile(
+          nextUser.email,
+          nextUser.dogName,
+          nextUser.breed,
+          nextUser.description,
+          nextUser.ownerName,
+          "fakeUrl"
+        );
+      }
       return nextUser;
     }
     return null;

@@ -128,20 +128,20 @@ secureApiRouter.delete("/logout", async (req, res) => {
   res.send("Logged out successfully");
 });
 
-// Get unliked profiles
-secureApiRouter.get("/unliked", async (req, res) => {
+// Get unvoted profiles
+secureApiRouter.get("/unvoted", async (req, res) => {
   const email = req.email;
   if (!email) {
     res.status(401).send("Unauthorized");
     return;
   }
   try {
-    const unlikedProfiles: Profile[] = await matchService.getUnvotedProfiles(
+    const unvotedProfiles: Profile[] = await matchService.getUnvotedProfiles(
       email
     );
-    res.status(200).send(unlikedProfiles);
+    res.status(200).send(unvotedProfiles);
   } catch (error) {
-    res.status(500).send("Server error while fetching unliked profiles");
+    res.status(500).send("Server error while fetching unvoted profiles");
   }
 });
 
@@ -183,18 +183,18 @@ secureApiRouter.post("/like", async (req, res) => {
 
 // Add a dislike
 secureApiRouter.post("/dislike", async (req, res) => {
-  const { likeeEmail } = req.body;
-  const likerEmail = req.email;
-  if (!likerEmail) {
+  const { dislikeeEmail } = req.body;
+  const dislikerEmail = req.email;
+  if (!dislikerEmail) {
     res.status(401).send("Unauthorized");
     return;
   }
-  if (!likeeEmail) {
+  if (!dislikeeEmail) {
     res.status(400).send("Missing likee");
     return;
   }
   try {
-    await matchService.dislike(likerEmail, likeeEmail);
+    await matchService.dislike(dislikerEmail, dislikeeEmail);
     res.status(200).send("Disliked successfully");
   } catch (error) {
     res.status(500).send("Server error while trying to add dislike");

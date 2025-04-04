@@ -47,9 +47,9 @@ class ApiClient {
     return response.map((profileObj) => Profile.fromObject(profileObj));
   }
 
-  async getUnlikedProfiles(): Promise<Profile[]> {
+  async getUnvotedProfiles(): Promise<Profile[]> {
     const response: ProfileObject[] = (await this.apiRequest.request(
-      "unliked",
+      "unvoted",
       "GET"
     )) as ProfileObject[];
     return response.map((profileObj) => Profile.fromObject(profileObj));
@@ -63,6 +63,11 @@ class ApiClient {
       body
     )) as { isMatch: boolean };
     return response.isMatch;
+  }
+
+  async dislike(dislikeeEmail: string): Promise<void> {
+    const body = { dislikeeEmail };
+    await this.apiRequest.request("dislike", "POST", body);
   }
 }
 
