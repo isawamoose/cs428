@@ -56,7 +56,6 @@ export class UserService {
     setUser: (user: Profile) => void
   ): Promise<Profile | null> {
     try {
-      console.log("newProfile", newProfile);
       const profile = await apiClient.updateProfile(newProfile);
       if (!profile) {
         throw new Error();

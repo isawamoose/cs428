@@ -3,7 +3,7 @@ import { MatchService } from "../services/MatchService";
 import { Profile } from "@shared/Profile";
 import "./Matches.css";
 import { useNavigate } from "react-router-dom";
-import noImage from "../assets/noImage.png"; // Placeholder image for when the profile image fails to load
+import ImageWithFallback from "../components/ImageWithFallback";
 
 const Matches = () => {
   const [matchedUsers, setMatchedUsers] = useState<Profile[]>([]);
@@ -13,9 +13,6 @@ const Matches = () => {
     const fetchMatchedUsers = async () => {
       const users = await MatchService.instance.getMatchedProfiles();
       setMatchedUsers(users);
-
-      console.log(`Total matched users: ${users.length}`);
-      console.log(users);
     };
 
     fetchMatchedUsers();
@@ -35,15 +32,11 @@ const Matches = () => {
               className="match-card"
               onClick={() => navigate(`/app/user/${user.email}`)}
             >
-              <img
+              <ImageWithFallback
                 src={user.imageLink}
                 alt={`${user.dogName}'s profile`}
                 className="match-image"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = noImage; // Fallback to placeholder image if the original fails to load
-                }}
               />
-
               <div className="match-details">
                 <div className="match-header">
                   <h1 className="match-name">{user.dogName}</h1>
