@@ -7,11 +7,11 @@ const ImageWithFallback = ({
 }: {
   src: string;
   alt: string;
-  className: string;
+  className?: string;
 }) => {
   return (
     <img
-      src={src}
+      src={src ?? noImage}
       alt={alt}
       className={className}
       onError={(e) => {

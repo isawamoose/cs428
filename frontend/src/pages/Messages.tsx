@@ -30,12 +30,11 @@ const Messages = () => {
             <div
               key={user.email}
               className="messages-card"
-              onClick={
-                () =>
-                  navigate(`/app/messages/conversation/${user.email}`, {
-                    state: { user },
-                  }) //Go to conversation with selected user
-              }
+              onClick={() => {
+                navigate(`/app/messages/conversation/${user.email}`, {
+                  state: { user },
+                }); //Go to conversation with selected user
+              }}
             >
               <ImageWithFallback
                 src={user.imageLink}

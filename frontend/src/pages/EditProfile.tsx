@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LuChevronLeft } from "react-icons/lu";
 import DogBreed from "../components/DogBreedInput/DogBreed";
+import ImageWithFallback from "../components/ImageWithFallback";
 
 interface Props {
   user: Profile;
@@ -46,8 +47,7 @@ const EditProfile = (props: Props) => {
         <LuChevronLeft className="back-icon" onClick={handleBackClick} />
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="edit-profile-pic">
-            <img
-              className="edit-image"
+            <ImageWithFallback
               src={props.user.imageLink}
               alt={props.user.dogName}
             />
