@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { LuChevronRight } from "react-icons/lu";
 import { useRef, useState } from "react";
 import { UserService } from "../services/UserService";
+import ImageWithFallback from "../components/ImageWithFallback";
 
 interface Props {
-  user: Profile | null;
+  user: Profile;
 }
 
 const ProfileSettings = (props: Props) => {
@@ -40,7 +41,11 @@ const ProfileSettings = (props: Props) => {
       </dialog>
 
       <div className="settings-header">
-        <img src={props.user?.imageLink} alt={props.user?.dogName} />
+        <ImageWithFallback
+          src={props.user.imageLink}
+          alt={props.user.dogName}
+          className="settings-image"
+        />
         <h1>{props.user?.dogName}</h1>
         <hr />
       </div>
