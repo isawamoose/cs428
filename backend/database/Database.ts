@@ -4,7 +4,7 @@ import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
 import { Profile } from "../../shared/Profile";
 
-export class Database {
+class Database {
   private initialized: Promise<void>;
   constructor() {
     this.initialized = this.initializeDatabase();
@@ -320,3 +320,6 @@ export class Database {
     }
   }
 }
+
+const db = new Database();
+export { db, Database };
