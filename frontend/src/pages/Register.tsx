@@ -4,10 +4,9 @@ import cam from "../assets/cam_plus.png";
 import check from "../assets/check.png";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import DogBreed from "../components/DogBreedInput/DogBreed";
-
 import { UserService } from "../services/UserService";
 import { Profile } from "@shared/Profile";
+import DogBreed from "../components/DogBreedInput/DogBreed";
 
 interface Props {
   setUser: (user: Profile) => void;
@@ -25,32 +24,38 @@ const Register = (props: Props) => {
   const [dogBreed, setDogBreed] = useState("");
   const [dogTraits, setDogTraits] = useState<string[]>([]);
   const [newTrait, setNewTrait] = useState("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dogPhoto, setDogPhoto] = useState<string | null>("fakePhotoURL");
+  const [file, setFile] = useState<File | null>(null);
+  const [dogPhoto, setDogPhoto] = useState<string>(cam);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
       const service = new UserService();
+
+      if (!file) {
+        alert('Unable to find image, please select a file first.');
+        return;
+      }
+
       const newProfile = new Profile(
         email,
         dogName,
         dogBreed,
         dogTraits.join(", "),
         `${ownerFirstName} ${ownerLastName}`,
-        dogPhoto || ""
+        "defaultimage.jpg"
       );
 
-      const user = await service.register(newProfile, password, props.setUser);
+      const user = await service.register(newProfile, password, file, props.setUser);
       if (!user) {
         alert("Register failed. Invalid information");
         return;
       }
-
+      
       navigate("/app");
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error: unknown) {
+    } catch (error) {
+      console.error((error as Error).message);
       alert("Register failed. Invalid information");
     }
   };
@@ -78,10 +83,11 @@ const Register = (props: Props) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      //reader.onloadend = () => {
-      //setDogPhoto(reader.result as string); // Convert file to base64 URL
-      //};
+      reader.onloadend = () => {
+        setDogPhoto(reader.result as string); // Convert file to base64 URL
+      };
       reader.readAsDataURL(file);
+      setFile(file);
     }
   };
 

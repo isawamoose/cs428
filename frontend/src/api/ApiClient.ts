@@ -69,6 +69,22 @@ class ApiClient {
     const body = { dislikeeEmail };
     await this.apiRequest.request("dislike", "POST", body);
   }
+
+  async uploadPhoto(file: File, key: string): Promise<string> {
+
+    interface Response {
+      url: string
+    }
+
+    const body = await file.arrayBuffer()
+    const headers = new Headers({
+      "Content-type": file.type,
+      "X-User-Email": key
+    })
+    console.log(headers)
+    const response = (await this.apiRequest.request("photo", "POST", body, headers) as Response)
+    return response.url
+  }
 }
 
 const apiClient = new ApiClient();
