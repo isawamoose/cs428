@@ -1,10 +1,11 @@
-import { MatchProfile, Profile } from "@shared/Profile";
+import { Profile } from "@shared/Profile";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MatchService } from "../services/MatchService";
 import { UserService } from "../services/UserService";
 import "../pages/Home.css";
 // Imported Home.css because this page has very similar styles
+import ImageWithFallback from "../components/ImageWithFallback";
 
 const ProfileView = () => {
   // if the path is "/app/user/:email" -- use the email to find the user
@@ -12,16 +13,19 @@ const ProfileView = () => {
 
   const { email } = useParams();
   const [userService] = useState<UserService>(new UserService());
-  const [profile, setProfile] = useState<Profile | MatchProfile | null>();
+  const [profile, setProfile] = useState<Profile | null>();
 
   useEffect(() => {
-    console.log(email);
+    fetchUserInfo();
+  }, [email]);
+
+  async function fetchUserInfo() {
     if (email) {
-      setProfile(MatchService.instance.getUser(email));
+      MatchService.instance.getUser(email).then((p) => setProfile(p));
     } else {
       userService.getProfile().then((p) => setProfile(p));
     }
-  }, [email]);
+  }
 
   if (profile) {
     return (
@@ -32,9 +36,9 @@ const ProfileView = () => {
         </div>
 
         <div className="match-profile-img-container">
-          <img
+          <ImageWithFallback
             src={profile?.imageLink}
-            alt={`${profile?.breed} named ${profile?.dogName}`}
+            alt={profile?.dogName}
             className="match-profile-img"
           />
         </div>
@@ -70,7 +74,7 @@ const ProfileView = () => {
         }}
       >
         <h1 style={{ textAlign: "center", color: "#038eff", padding: "1rem" }}>
-          Sorry, we count't find this profile
+          Sorry, we couldn't find this profile.
         </h1>
         <Link
           to="/app"

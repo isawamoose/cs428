@@ -10,8 +10,8 @@
   position: relative;
 }
 
-.edit-features {
-  width: 75%;
+.edit-profile-page .edit-features input {
+  width: 100%;
 }
 
 .edit-profile-page .back-icon {
@@ -59,6 +59,10 @@
 
 .edit-profile-page input::placeholder {
   opacity: 0.1;
+}
+
+.edit-profile-page .dog-breed-container input {
+  width: 100%;
 }
 
 .edit-profile-page button.edit-submit {

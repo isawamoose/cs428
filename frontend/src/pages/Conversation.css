@@ -1,0 +1,46 @@
+.conversation-page {
+  height: 100%;
+  margin-top: 0;
+  overflow-x: clip;
+}
+
+.conversation-page .conversation-header {
+  margin-left: 2.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.conversation-page .conversation-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Aligns image and name to the right */
+  gap: 10px; /* Adds space between the image and name */
+  width: 100%;
+  margin-right: 5rem;
+  margin-top: 2rem;
+}
+
+.conversation-page .conversation-image {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 10%;
+  border: 3px solid #ffbe00;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+}
+
+.conversation-page h2 {
+  font-size: 2rem;
+  color: #038eff;
+  margin: 0;
+  text-align: right; /* Aligns the text to the right */
+}
+
+.conversation-page .back-icon {
+  position: absolute;
+  top: 2.5rem;
+  left: 1rem;
+  font-size: 3rem;
+  color: black;
+}

@@ -27,8 +27,8 @@ export class ApiRequest {
           return response;
         }
       } else {
-        const error = await resp.json();
-        throw new Error(error.errorMessage);
+        const error = await resp.text();
+        throw new Error(error);
       }
     } catch (err) {
       throw new Error("Request failed:\n" + (err as Error).message);
