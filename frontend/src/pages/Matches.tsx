@@ -4,6 +4,7 @@ import { Profile } from "@shared/Profile";
 import "./Matches.css";
 import { useNavigate } from "react-router-dom";
 import ImageWithFallback from "../components/ImageWithFallback";
+import { LuMessageCircle } from "react-icons/lu";
 
 const Matches = () => {
   const [matchedUsers, setMatchedUsers] = useState<Profile[]>([]);
@@ -27,24 +28,35 @@ const Matches = () => {
       <div className="match-list">
         {matchedUsers.length > 0 ? (
           matchedUsers.map((user) => (
-            <div
-              key={user.email}
-              className="match-card"
-              onClick={() => navigate(`/app/user/${user.email}`)}
-            >
-              <ImageWithFallback
-                src={user.imageLink}
-                alt={`${user.dogName}'s profile`}
-                className="match-image"
-              />
-              <div className="match-details">
-                <div className="match-header">
-                  <h1 className="match-name">{user.dogName}</h1>
-                  <p className="match-breed">{user.breed}</p>
+            <div key={user.email} className="match-wrapper">
+              <div
+                className="match-card"
+                onClick={() => navigate(`/app/user/${user.email}`)}
+              >
+                <ImageWithFallback
+                  src={user.imageLink}
+                  alt={`${user.dogName}'s profile`}
+                  className="match-image"
+                />
+                <div className="match-details">
+                  <div className="match-header">
+                    <h1 className="match-name">{user.dogName}</h1>
+                    <p className="match-breed">{user.breed}</p>
+                  </div>
+                  <p className="match-description">{user.description}</p>
                 </div>
-
-                <p className="match-description">{user.description}</p>
               </div>
+
+              {/* Message icon OUTSIDE the clickable card */}
+              <LuMessageCircle
+                className="message-icon"
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent card click
+                  navigate(`/app/matches/conversation/${user.email}`, {
+                    state: { user },
+                  });
+                }}
+              />
             </div>
           ))
         ) : (

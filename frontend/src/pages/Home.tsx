@@ -27,6 +27,7 @@ const Home = (props: Props) => {
   }, []);
 
   const handleLike = async () => {
+    //console.log("Pressed like");
     const [isMatch, email] = await matchService.like(displayedUser!);
     if (isMatch) {
       setEmail(email);
