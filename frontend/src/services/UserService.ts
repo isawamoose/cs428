@@ -25,14 +25,21 @@ export class UserService {
   public async register(
     newProfile: Profile,
     password: string,
+    file: File,
     setUser: (user: Profile) => void
   ) {
     try {
       await apiClient.register(password, newProfile);
-      const profile = await apiClient.getProfile();
+      let profile = await apiClient.getProfile();
       if (!profile) {
         throw new Error();
       }
+
+      const photoURL = await apiClient.uploadPhoto(file, newProfile.email)
+      if (photoURL) {
+        profile = new Profile(profile.email, profile.dogName, profile.breed, profile.description, profile.ownerName, photoURL);
+      }
+  
       setUser(profile);
       localStorage.setItem("user", JSON.stringify(profile));
       return profile;
@@ -85,24 +92,8 @@ export class UserService {
     }
   }
 
-  public async uploadPhoto(file: File, email: string): Promise<string> {
-    const arrayBuffer = await file.arrayBuffer();
-  
-    const response = await fetch('https://kn31xc1q6k.execute-api.us-east-1.amazonaws.com/prod/photo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type,
-        'X-User-Email': email
-      },
-      body: arrayBuffer,
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.url;
-    } else {
-      throw new Error(response.statusText);
-    }
+  private async uploadPhoto(file: File, email: string): Promise<string> {
+    return await apiClient.uploadPhoto(file, email)
   }
 
   //just putting this here for now, will need to connect to back end

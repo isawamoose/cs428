@@ -4,7 +4,6 @@ import cam from "../assets/cam_plus.png";
 import check from "../assets/check.png";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import DogBreed from "../components/DogBreedInput/DogBreed";
 
 import { UserService } from "../services/UserService";
 import { Profile } from "@shared/Profile";
@@ -37,11 +36,6 @@ const Register = (props: Props) => {
         alert('Unable to find image, please select a file first.');
         return;
       }
-      
-      // Would be nice if we could do this after we verify the email isn't already in use. 
-      // Currently this will override any existing photo.
-      // But that's a problem for later.
-      const photoURL = await service.uploadPhoto(file, email)
 
       const newProfile = new Profile(
         email,
@@ -49,15 +43,15 @@ const Register = (props: Props) => {
         dogBreed,
         dogTraits.join(", "),
         `${ownerFirstName} ${ownerLastName}`,
-        photoURL
+        "defaultimage.jpg"
       );
 
-      const user = await service.register(newProfile, password, props.setUser);
+      const user = await service.register(newProfile, password, file, props.setUser);
       if (!user) {
         alert("Register failed. Invalid information");
         return;
       }
-
+      
       navigate("/app");
 
     } catch (error) {
@@ -160,7 +154,21 @@ const Register = (props: Props) => {
             )}
             {/* Step 3: Dog Breed */}
             {step === 3 && (
-              <DogBreed dogBreed={dogBreed} setDogBreed={setDogBreed} />
+              <select
+                value={dogBreed}
+                onChange={(e) => setDogBreed(e.target.value)}
+                required
+              >
+                <option value="" disabled>
+                  Select dog breed
+                </option>
+                <option value="Labrador">Labrador Retriever</option>
+                <option value="French Bulldog">French Bulldog</option>
+                <option value="Golden Retriever">Golden Retriever</option>
+                <option value="Poodle">Poodle</option>
+                <option value="Bulldog">Bulldog</option>
+                <option value="German Shepherd">German Shepherd</option>
+              </select>
             )}
 
             {/* Step 4: Dog Personality */}
