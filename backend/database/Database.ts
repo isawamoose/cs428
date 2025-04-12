@@ -3,6 +3,8 @@ import { config } from "../config";
 import { tableCreateStatements } from "./dbModel";
 import bcrypt from "bcrypt";
 import { Profile } from "../../shared/Profile";
+import { Message } from "../../shared/Message";
+import { Conversation } from "../../shared/Conversation";
 
 class Database {
   private initialized: Promise<void>;
@@ -246,6 +248,12 @@ class Database {
       "INSERT INTO dog_match (user1Email, user2Email) VALUES (?, ?)",
       [user1Email, user2Email]
     );
+    const convo_created = await this.createConversation(user1Email, user2Email);
+    if (!convo_created) {
+      console.log("Error creating conversation between users");
+      // throw new Error("Error creating conversation between users");
+    }
+
     return rows && rows.affectedRows === 1;
   }
 
@@ -292,6 +300,103 @@ class Database {
       console.error(`Error getting matches: ${error.message}`);
       return [];
     }
+  }
+
+  // Messaging Endpoints
+  async createConversation(
+    user1Email: string,
+    user2Email: string
+  ): Promise<number> {
+    const [emailA, emailB] =
+      user1Email < user2Email
+        ? [user1Email, user2Email]
+        : [user2Email, user1Email];
+
+    const [rows] = await this.executeQuery(
+      "add_conversation",
+      "INSERT INTO conversation (user1Email, user2Email) VALUES (?, ?)",
+      [emailA, emailB]
+    );
+    if (rows && rows.affectedRows === 1) {
+      return rows.insertId;
+    }
+    return -1;
+  }
+
+  async getConversationId(
+    user1Email: string,
+    user2Email: string
+  ): Promise<number> {
+    const [emailA, emailB] =
+      user1Email < user2Email
+        ? [user1Email, user2Email]
+        : [user2Email, user1Email];
+    const [rows] = await this.executeQuery(
+      "get_conversation_id",
+      "SELECT id from conversation WHERE user1Email = ? AND user2Email = ?",
+      [emailA, emailB]
+    );
+    if (!rows || rows.length === 0) {
+      // throw new Error("Users do not have an existing conversation yet");
+      return await this.createConversation(user1Email, user2Email);
+    }
+    return rows[0].id;
+  }
+
+  async addMessage(message: Message): Promise<boolean> {
+    const convoId: number = await this.getConversationId(
+      message.senderEmail,
+      message.recipientEmail
+    );
+    const [rows] = await this.executeQuery(
+      "add_message",
+      "INSERT INTO message (senderEmail, recipientEmail, conversationId, messageText, timestamp, isRead) VALUES (?, ?, ?, ?, ?, ?)",
+      [
+        message.senderEmail,
+        message.recipientEmail,
+        convoId,
+        message.messageText,
+        message.timestamp ?? new Date(),
+        true,
+      ]
+    );
+    return rows && rows.affectedRows === 1;
+  }
+
+  async conversationExists(conversationId: number): Promise<boolean> {
+    const [rows] = await this.executeQuery(
+      "check_conversation_exists",
+      "SELECT 1 FROM conversation WHERE id = ? LIMIT 1",
+      [conversationId]
+    );
+    return rows.length > 0;
+  }
+
+  async getConversation(conversationId: number): Promise<Conversation> {
+    const convoExists = await this.conversationExists(conversationId);
+    if (!convoExists) {
+      throw new Error(
+        `Conversation does not exist with this id: ${conversationId}`
+      );
+    }
+    const [rows] = await this.executeQuery(
+      "get_conversation",
+      "SELECT * FROM message WHERE conversationId = ?",
+      [conversationId]
+    );
+    const conversation: Conversation = new Conversation(conversationId);
+    const messages: Message[] = rows.map(
+      (row: any) =>
+        new Message(
+          row.senderEmail,
+          row.recipientEmail,
+          row.messageText,
+          new Date(row.timestamp)
+        )
+    );
+    conversation.setMessages(messages);
+
+    return conversation;
   }
 
   async getUnvotedProfiles(email: string): Promise<Profile[]> {
