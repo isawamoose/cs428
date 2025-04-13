@@ -1,10 +1,10 @@
-//about half of the code on this page was added by John. 
+//about half of the code on this page was added by John.
 // (mostly the bottom half)
 // Don't be afraid to change something if you need to
 
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { LuChevronLeft } from "react-icons/lu";
+import { LuChevronLeft, LuArrowUp } from "react-icons/lu";
 import "./Conversation.css";
 import ImageWithFallback from "../components/ImageWithFallback";
 import { Profile } from "@shared/Profile";
@@ -12,15 +12,17 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { MessageService } from "../services/MessageService";
 import { UserService } from "../services/UserService";
+import { Conversation } from "@shared/Conversation";
 
-const Conversation = () => {
+const ConversationPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [myEmail, setMyEmail] = useState("");
   const [userService] = useState<UserService>(new UserService());
-  const [messages, setMessages] = useState([]);
   const location = useLocation();
   const user = Profile.fromObject(location.state?.user) as Profile;
   const navigate = useNavigate();
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+  // const [input, setInput] = useState("");
 
   const handleBackClick = () => {
     navigate(-1);
@@ -33,15 +35,17 @@ const Conversation = () => {
       }
     });
     const fetchConversation = async () => {
-      const conversation = await MessageService.instance.getConversation(myEmail, user.email);
-      setMessages(conversation);
-    } 
+      const conversation = await MessageService.instance.getConversation(
+        user.email
+      );
+      if (conversation) setConversation(conversation);
+    };
     fetchConversation();
   }, []);
 
-  const sendMessage = () => {
+  const handleSend = () => {
     if (newMessage.trim() !== "") {
-      console.log("Sending message: ", newMessage)
+      console.log("Sending message: ", newMessage);
       MessageService.instance.sendMessage(user.email, newMessage, myEmail);
       //sendMessage([friend, newMessage]);
       setNewMessage("");
@@ -55,6 +59,27 @@ const Conversation = () => {
     { sender: "them", text: "Oh nice mine is still working on that" },
     { sender: "me", text: "They could get together and mine could teach yours" },
   ];*/
+
+  // const handleSend = () => {
+  //   if (!input.trim()) return;
+
+  //   // Push user input immediately
+  //   setMessages((prev) => [...prev, `You: ${input}`]);
+
+  //   // Simulate bot reply with delay (after a short timeout)
+  //   setInput("");
+
+  //   setTimeout(() => {
+  //     // Add bot's reply after a delay
+  //     setMessages((prev) => [...prev, `Bot: Bow Wow!🦴`]);
+  //   }, 1000); // Delay of 1.0 seconds
+  // };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
 
   return (
     <div className="conversation-page">
@@ -73,15 +98,19 @@ const Conversation = () => {
       </div>
 
       {/* Conversation history */}
-      <div className="message-history">
-        {messages.map((msg, index) => (
-          <div key={index}
-            className={`message-bubble ${msg.sender === "me" ? "sent" : "received"}`}>
-              {msg.text}
+      <div className="messages-container">
+        {conversation?.messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message-bubble ${
+              msg.senderEmail === myEmail ? "sent" : "received"
+            }`}
+          >
+            {msg.messageText}
           </div>
         ))}
       </div>
-    
+
       {/*add keyboard/messaging functionality here*/}
       <div className="message-input-container">
         <input
@@ -89,12 +118,39 @@ const Conversation = () => {
           className="message-input"
           placeholder="Type a message..."
           value={newMessage}
-          onChange={(e)=> setNewMessage(e.target.value)}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
         />
-        <button className="send-button" onClick={sendMessage}>Send</button>
+        <button onClick={handleSend}>
+          <LuArrowUp className="send-arrow" />
+        </button>
+        {/* <div className="messages-container">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message-bubble ${
+              msg.startsWith("You:") ? "sent" : "received"
+            }`}
+          >
+            {msg.replace("You: ", "").replace("Bot: ", "")}
+          </div>
+        ))}
+      </div>
+
+      <div className="message-input-container">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder="Type a message..."
+        />
+        <button onClick={handleSend}>
+          <LuArrowUp className="send-arrow" />
+        </button> */}
       </div>
     </div>
   );
 };
 
-export default Conversation;
+export default ConversationPage;

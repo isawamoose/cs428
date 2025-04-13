@@ -9,8 +9,7 @@ import ProfileSettings from "../pages/ProfileSettings";
 import EditProfile from "../pages/EditProfile";
 import Terms from "../pages/Terms";
 import ProfileView from "../pages/ProfileView";
-import Messages from "../pages/Messages";
-import Conversation from "../pages/Conversation";
+import ConversationPage from "../pages/Conversation";
 
 interface Props {
   user: Profile | null;
@@ -40,11 +39,13 @@ const AuthRouter = (props: Props) => {
         <Route path="/matches" element={<Matches />} />
         <Route path="/user/:email?" element={<ProfileView />} />
         <Route path="/" element={<Home user={props.user} />} />
-        <Route path="messages" element={<Messages />} />
-        <Route path="messages/conversation/:email" element={<Conversation />} />
+        <Route
+          path="matches/conversation/:email"
+          element={<ConversationPage />}
+        />
         <Route
           path="/settings"
-          element={<ProfileSettings user={props.user} />}
+          element={<ProfileSettings user={props.user!} />}
         />
         <Route
           path="/settings/edit-profile"

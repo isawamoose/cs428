@@ -1,5 +1,6 @@
 import { Profile, ProfileObject } from "@shared/Profile";
 import { ApiRequest } from "./Request";
+import { Conversation } from "@shared/Conversation";
 
 class ApiClient {
   private apiRequest: ApiRequest = new ApiRequest();
@@ -71,45 +72,52 @@ class ApiClient {
   }
 
   async uploadPhoto(file: File, key: string): Promise<string> {
-
     interface Response {
-      url: string
+      url: string;
     }
 
-    const body = await file.arrayBuffer()
+    const body = await file.arrayBuffer();
     const headers = new Headers({
       "Content-type": file.type,
-      "X-User-Email": key
-    })
-    console.log(headers)
-    const response = (await this.apiRequest.request("photo", "POST", body, headers) as Response)
-    return response.url
+      "X-User-Email": key,
+    });
+    console.log(headers);
+    const response = (await this.apiRequest.request(
+      "photo",
+      "POST",
+      body,
+      headers
+    )) as Response;
+    return response.url;
   }
 
   //this last function was added by John for messaging functionality
   //Don't hesitate to change if necessary
 
-  async sendMessage(friendEmail: string, message: string, myEmail: string): Promise<void> {
-    const body = { 
+  async sendMessage(
+    friendEmail: string,
+    message: string,
+    myEmail: string
+  ): Promise<void> {
+    const body = {
       friendEmail,
       message,
       myEmail,
-    }
+    };
     console.log("in api client");
     await this.apiRequest.request("message", "POST", body);
   }
 
   //and John added this function too
-  async getConversation(userEmail: string, matchEmail: string): Promise<Array<string>> {
+  async getConversation(matchEmail: string): Promise<Conversation> {
     console.log("In getconversation of apiClient");
-    const body = {
-      userEmail,
-      matchEmail,
-    }
-    const messages = await this.apiRequest.request("conversation", "GET", body);
-    return messages as string[]; 
+    const conversationObject = await this.apiRequest.request(
+      "conversation?matchEmail=" + matchEmail,
+      "GET"
+    );
+    const conversation = Conversation.fromJson(conversationObject);
+    return conversation;
   }
-
 }
 
 const apiClient = new ApiClient();

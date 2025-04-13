@@ -1,6 +1,8 @@
 .conversation-page {
-  height: 100vh;
   margin-top: 0;
+  height: 100vh;
+  background: url("paws-bg.png") no-repeat center center;
+  background-size: cover;
   overflow-x: clip;
 }
 
@@ -14,8 +16,8 @@
 .conversation-page .conversation-info {
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* Aligns image and name to the right */
-  gap: 10px; /* Adds space between the image and name */
+  justify-content: flex-end;
+  gap: 10px;
   width: 100%;
   margin-right: 5rem;
   margin-top: 2rem;
@@ -45,68 +47,70 @@
   color: black;
 }
 
-/*Code from here down was added by john
-don't hesitate to change something if you need to*/
-
-.message-bubble {
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  max-width: 70%;
-  font-size: 1rem;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-
-.message-history {
+.messages-container {
   flex: 1;
+  padding: 1rem;
   overflow-y: auto;
-  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+.message-bubble {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  font-size: 0.95rem;
+}
+
 .sent {
-  background-color: yellow;
   align-self: flex-end;
-  color: black;
+  background-color: #038eff;
 }
 
 .received {
-  background-color: black;
   align-self: flex-start;
-  color: yellow;
+  background-color: darkgrey;
 }
 
 .message-input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: white; /* Or another background color */
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid #ccc;
-  background-color: #fff;
+  justify-content: flex-start; /* Align input and button horizontally */
 }
 
-.message-input {
-  flex: 1;
-  padding: 0.6rem 1rem;
-  border: 1px solid #ccc;
+.message-input-container input {
+  flex: 9;
+  padding: 10px;
   border-radius: 20px;
-  font-size: 1rem;
-  outline: none;
-  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  background-color: white;
+  color: black;
 }
 
-.send-button {
-  background-color: #038eff;
+.message-input-container button {
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
-  font-size: 1rem;
+  border-radius: 50%; /* Makes the button circular */
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.send-button:hover {
-  background-color: #0276cf;
+.message-input-container .send-arrow {
+  width: 30px;
+  height: 30px;
 }

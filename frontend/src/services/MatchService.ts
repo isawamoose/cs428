@@ -31,6 +31,7 @@ export class MatchService {
     if (isMatch) {
       await this.getMatchedProfiles(); // Refresh matched profiles
       email = otherUser.email;
+      //console.log("here");
     }
 
     await this.getUnvotedProfiles(); // Refresh unliked profiles

@@ -50,6 +50,7 @@ const EditProfile = (props: Props) => {
             <ImageWithFallback
               src={props.user.imageLink}
               alt={props.user.dogName}
+              className="edit-image"
             />
           </div>
 

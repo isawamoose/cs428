@@ -25,8 +25,8 @@ messageRouter.post("/message", async (req, res) => {
 });
 
 messageRouter.get("/conversation", async (req, res) => {
-  const userEmail = req.body.userEmail;
-  const matchEmail = req.body.matchEmail;
+  const userEmail = req.email as string;
+  const matchEmail = req.query.matchEmail as string;
   if (!userEmail) {
     res.status(401).send("Unauthorized");
     return;

@@ -31,4 +31,13 @@ export class Message {
   get timestamp(): Date {
     return this._timestamp;
   }
+
+  static fromJson(json: any): Message {
+    return new Message(
+      json.senderEmail,
+      json.recipientEmail,
+      json.messageText,
+      new Date(json.timestamp)
+    );
+  }
 }
