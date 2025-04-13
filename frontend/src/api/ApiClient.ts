@@ -85,6 +85,31 @@ class ApiClient {
     const response = (await this.apiRequest.request("photo", "POST", body, headers) as Response)
     return response.url
   }
+
+  //this last function was added by John for messaging functionality
+  //Don't hesitate to change if necessary
+
+  async sendMessage(friendEmail: string, message: string, myEmail: string): Promise<void> {
+    const body = { 
+      friendEmail,
+      message,
+      myEmail,
+    }
+    console.log("in api client");
+    await this.apiRequest.request("message", "POST", body);
+  }
+
+  //and John added this function too
+  async getConversation(userEmail: string, matchEmail: string): Promise<Array<string>> {
+    console.log("In getconversation of apiClient");
+    const body = {
+      userEmail,
+      matchEmail,
+    }
+    const messages = await this.apiRequest.request("conversation", "GET", body);
+    return messages as string[]; 
+  }
+
 }
 
 const apiClient = new ApiClient();
