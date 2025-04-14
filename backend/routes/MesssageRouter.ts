@@ -28,8 +28,15 @@ messageRouter.post("/message", async (req, res) => {
   }
   try {
     const messageSent: boolean = await messageService.addMessage(message);
-    if (messageSent) res.status(200).send({ messageSent });
-    else res.status(500).send("Server error while sending message");
+    if (messageSent) {
+      const conversation: Conversation = await messageService.getConversation(
+        message.senderEmail,
+        message.recipientEmail
+      );
+      if (conversation) {
+        res.send(conversation);
+      } else res.status(400).send("Failed to get conversation");
+    } else res.status(500).send("Server error while sending message");
   } catch (error) {
     res
       .status(500)

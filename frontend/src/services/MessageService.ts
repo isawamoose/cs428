@@ -21,7 +21,7 @@ export class MessageService {
     myEmail: string,
     friendEmail: string,
     message: string
-  ) {
+  ): Promise<Conversation | null> {
     try {
       const newMessage = new Message(
         myEmail,
@@ -29,7 +29,8 @@ export class MessageService {
         message,
         new Date().toISOString()
       );
-      await apiClient.sendMessage(newMessage);
+      const conversation = await apiClient.sendMessage(newMessage);
+      return conversation;
     } catch (error: unknown) {
       console.error("Could not send message.", (error as Error).message);
       return null;

@@ -92,11 +92,17 @@ class ApiClient {
     return response.url;
   }
 
-  async sendMessage(message: Message): Promise<void> {
+  async sendMessage(message: Message): Promise<Conversation> {
     const body = {
       message,
     };
-    await this.apiRequest.request("message", "POST", body);
+    const conversationObject = await this.apiRequest.request(
+      "message",
+      "POST",
+      body
+    );
+    const conversation = Conversation.fromJson(conversationObject);
+    return conversation;
   }
 
   async getConversation(matchEmail: string): Promise<Conversation> {

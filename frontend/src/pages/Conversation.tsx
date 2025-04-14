@@ -39,40 +39,27 @@ const ConversationPage = () => {
         user.email
       );
       if (conversation) setConversation(conversation);
+      console.log(conversation?.messages, conversation?.id);
     };
     fetchConversation();
   }, []);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (newMessage.trim() !== "") {
       console.log("Sending message: ", newMessage);
-      MessageService.instance.sendMessage(myEmail, user.email, newMessage);
+      const conversation = await MessageService.instance.sendMessage(
+        myEmail,
+        user.email,
+        newMessage
+      );
+      if (conversation) {
+        setConversation(conversation);
+      } else {
+        console.error("Failed to send message.");
+      }
       setNewMessage("");
     }
   };
-
-  /* Simulated messages
-  const messages = [
-    { sender: "them", text: "Hey does your dog do any tricks??" },
-    { sender: "me", text: "Yeah he just learned the 'Pee all over the carpet' one" },
-    { sender: "them", text: "Oh nice mine is still working on that" },
-    { sender: "me", text: "They could get together and mine could teach yours" },
-  ];*/
-
-  // const handleSend = () => {
-  //   if (!input.trim()) return;
-
-  //   // Push user input immediately
-  //   setMessages((prev) => [...prev, `You: ${input}`]);
-
-  //   // Simulate bot reply with delay (after a short timeout)
-  //   setInput("");
-
-  //   setTimeout(() => {
-  //     // Add bot's reply after a delay
-  //     setMessages((prev) => [...prev, `Bot: Bow Wow!🦴`]);
-  //   }, 1000); // Delay of 1.0 seconds
-  // };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {

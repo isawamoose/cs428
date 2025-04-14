@@ -34,7 +34,7 @@ export class Conversation {
 
   static fromJson(json: any): Conversation {
     const messages: Message[] =
-      json.messages?.map((message: any) => Message.fromJson(message)) ?? [];
-    return new Conversation(json.id, messages);
+      json._messages?.map((message: any) => Message.fromJson(message)) ?? [];
+    return new Conversation(json._id, messages);
   }
 }
