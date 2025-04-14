@@ -91,9 +91,6 @@ class ApiClient {
     return response.url;
   }
 
-  //this last function was added by John for messaging functionality
-  //Don't hesitate to change if necessary
-
   async sendMessage(
     friendEmail: string,
     message: string,
@@ -108,9 +105,7 @@ class ApiClient {
     await this.apiRequest.request("message", "POST", body);
   }
 
-  //and John added this function too
   async getConversation(matchEmail: string): Promise<Conversation> {
-    console.log("In getconversation of apiClient");
     const conversationObject = await this.apiRequest.request(
       "conversation?matchEmail=" + matchEmail,
       "GET"

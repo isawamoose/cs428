@@ -99,7 +99,7 @@ const ConversationPage = () => {
 
       {/* Conversation history */}
       <div className="messages-container">
-        {conversation?.messages.map((msg, index) => (
+        {conversation?.messages?.map((msg, index) => (
           <div
             key={index}
             className={`message-bubble ${
