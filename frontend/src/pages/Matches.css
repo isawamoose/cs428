@@ -17,17 +17,28 @@
 .match-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
+  justify-content: flex-start; /* Don't space out */
+  gap: 1rem; /* Consistent spacing between card and icon */
   margin-bottom: 1rem;
 }
 
-.matches-page .message-icon {
-  color: #038eff;
-  width: 100%;
-  height: 100%;
-  margin-left: 3px;
+.message-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  margin-left: auto; /* Push to the right */
   margin-right: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.matches-page .message-icon {
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  color: #038eff;
+  margin-left: 3px;
   padding-bottom: 1rem;
 }
 
