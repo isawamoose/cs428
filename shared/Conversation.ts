@@ -12,13 +12,15 @@ export class Conversation {
   addMessage(message: Message) {
     this._messages.push(message);
     this._messages.sort(
-      (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
   }
 
   setMessages(messages: Message[]) {
     this._messages = messages.sort(
-      (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
   }
 

@@ -1,5 +1,6 @@
 //this whole page was added by John. Don't be afraid to change something if you need to
 
+import { Message } from "@shared/Message";
 import { apiClient } from "../api/ApiClient";
 import { Conversation } from "@shared/Conversation";
 
@@ -17,13 +18,18 @@ export class MessageService {
   private constructor() {}
 
   public async sendMessage(
+    myEmail: string,
     friendEmail: string,
-    message: string,
-    myEmail: string
+    message: string
   ) {
     try {
-      console.log("In Message service");
-      await apiClient.sendMessage(friendEmail, message, myEmail);
+      const newMessage = new Message(
+        myEmail,
+        friendEmail,
+        message,
+        new Date().toISOString()
+      );
+      await apiClient.sendMessage(newMessage);
     } catch (error: unknown) {
       console.error("Could not send message.", (error as Error).message);
       return null;

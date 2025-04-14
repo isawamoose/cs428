@@ -1,6 +1,7 @@
 import { Profile, ProfileObject } from "@shared/Profile";
 import { ApiRequest } from "./Request";
 import { Conversation } from "@shared/Conversation";
+import { Message } from "@shared/Message";
 
 class ApiClient {
   private apiRequest: ApiRequest = new ApiRequest();
@@ -91,17 +92,10 @@ class ApiClient {
     return response.url;
   }
 
-  async sendMessage(
-    friendEmail: string,
-    message: string,
-    myEmail: string
-  ): Promise<void> {
+  async sendMessage(message: Message): Promise<void> {
     const body = {
-      friendEmail,
       message,
-      myEmail,
     };
-    console.log("in api client");
     await this.apiRequest.request("message", "POST", body);
   }
 

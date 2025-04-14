@@ -46,8 +46,7 @@ const ConversationPage = () => {
   const handleSend = () => {
     if (newMessage.trim() !== "") {
       console.log("Sending message: ", newMessage);
-      MessageService.instance.sendMessage(user.email, newMessage, myEmail);
-      //sendMessage([friend, newMessage]);
+      MessageService.instance.sendMessage(myEmail, user.email, newMessage);
       setNewMessage("");
     }
   };

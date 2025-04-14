@@ -391,7 +391,7 @@ class Database {
           row.senderEmail,
           row.recipientEmail,
           row.messageText,
-          new Date(row.timestamp)
+          row.timestamp
         )
     );
     conversation.setMessages(messages);

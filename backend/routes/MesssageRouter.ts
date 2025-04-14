@@ -8,20 +8,22 @@ const messageRouter = express.Router();
 
 messageRouter.post("/message", async (req, res) => {
   const { message } = req.body;
-  if (!message) {
-    res.status(400).send("No message sent");
-    return;
-  }
+  console.log("Message: ", message);
+  res.send("Message received");
+  // if (!message) {
+  //   res.status(400).send("No message sent");
+  //   return;
+  // }
 
-  try {
-    const messageSent: boolean = await messageService.addMessage(message);
-    if (messageSent) res.status(200).send({ messageSent });
-    else res.status(500).send("Server error while sending message");
-  } catch (error) {
-    res
-      .status(500)
-      .send(`Server error while trying to send message: ${message}`);
-  }
+  // try {
+  //   const messageSent: boolean = await messageService.addMessage(message);
+  //   if (messageSent) res.status(200).send({ messageSent });
+  //   else res.status(500).send("Server error while sending message");
+  // } catch (error) {
+  //   res
+  //     .status(500)
+  //     .send(`Server error while trying to send message: ${message}`);
+  // }
 });
 
 messageRouter.get("/conversation", async (req, res) => {

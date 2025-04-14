@@ -2,13 +2,13 @@ export class Message {
   private _senderEmail: string;
   private _recipientEmail: string;
   private _messageText: string;
-  private _timestamp: Date;
+  private _timestamp: string;
 
   constructor(
     senderEmail: string,
     recipientEmail: string,
     messageText: string,
-    timestamp: Date = new Date()
+    timestamp: string = new Date().toISOString()
   ) {
     this._senderEmail = senderEmail;
     this._recipientEmail = recipientEmail;
@@ -28,7 +28,7 @@ export class Message {
     return this._messageText;
   }
 
-  get timestamp(): Date {
+  get timestamp(): string {
     return this._timestamp;
   }
 
@@ -37,7 +37,7 @@ export class Message {
       json.senderEmail,
       json.recipientEmail,
       json.messageText,
-      new Date(json.timestamp)
+      json.timestamp
     );
   }
 }
