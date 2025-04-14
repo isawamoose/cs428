@@ -77,9 +77,7 @@ const ConversationPage = () => {
             alt={`${user.dogName}'s profile`}
             className="conversation-image"
           />
-          <h2 className="match-title">
-            {user.ownerName} & {user.dogName}
-          </h2>
+          <h2 className="match-title">{user.ownerName}</h2>
         </div>
       </div>
 
