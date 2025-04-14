@@ -333,8 +333,8 @@ class Database {
         : [user2Email, user1Email];
     const [rows] = await this.executeQuery(
       "get_conversation_id",
-      "SELECT id from conversation WHERE user1Email = ? AND user2Email = ?",
-      [emailA, emailB]
+      "SELECT id from conversation WHERE user1Email = ? AND user2Email = ? OR user1Email = ? AND user2Email = ?",
+      [emailA, emailB, emailB, emailA]
     );
     if (!rows || rows.length === 0) {
       // throw new Error("Users do not have an existing conversation yet");
