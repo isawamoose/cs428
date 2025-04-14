@@ -43,4 +43,26 @@ export const tableCreateStatements = [
     INDEX idx_user1Email (user1Email),
     INDEX idx_user2Email (user2Email)
   )`,
+
+  `CREATE TABLE IF NOT EXISTS conversation(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user1Email VARCHAR(255) NOT NULL,
+    user2Email VARCHAR(255) NOT NULL,
+    UNIQUE KEY unique_pair (user1Email, user2Email),
+    FOREIGN KEY (user1Email) REFERENCES user(email),
+    FOREIGN KEY (user2Email) REFERENCES user(email)
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS message(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    senderEmail VARCHAR(255) NOT NULL,
+    recipientEmail VARCHAR(255) NOT NULL,
+    conversationId INT NOT NULL,
+    messageText TEXT NOT NULL,
+    timestamp VARCHAR(28) NOT NULL,
+    isRead BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (senderEmail) REFERENCES user(email),
+    FOREIGN KEY (conversationId) references conversation(id),
+    INDEX idx_convo_time (conversationId, timestamp)
+  )`,
 ];

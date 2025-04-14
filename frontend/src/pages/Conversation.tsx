@@ -1,3 +1,7 @@
+//about half of the code on this page was added by John.
+// (mostly the bottom half)
+// Don't be afraid to change something if you need to
+
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LuChevronLeft, LuArrowUp } from "react-icons/lu";
@@ -5,31 +9,56 @@ import "./Conversation.css";
 import ImageWithFallback from "../components/ImageWithFallback";
 import { Profile } from "@shared/Profile";
 import { useState } from "react";
+import { useEffect } from "react";
+import { MessageService } from "../services/MessageService";
+import { UserService } from "../services/UserService";
+import { Conversation } from "@shared/Conversation";
 
-const Conversation = () => {
+const ConversationPage = () => {
+  const [newMessage, setNewMessage] = useState("");
+  const [myEmail, setMyEmail] = useState("");
+  const [userService] = useState<UserService>(new UserService());
   const location = useLocation();
   const user = Profile.fromObject(location.state?.user) as Profile;
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<string[]>([]);
-  const [input, setInput] = useState("");
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+  // const [input, setInput] = useState("");
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  useEffect(() => {
+    userService.getProfile().then((profile) => {
+      if (profile) {
+        setMyEmail(profile.email);
+      }
+    });
+    const fetchConversation = async () => {
+      const conversation = await MessageService.instance.getConversation(
+        user.email
+      );
+      if (conversation) setConversation(conversation);
+      console.log(conversation?.messages, conversation?.id);
+    };
+    fetchConversation();
+  }, []);
 
-    // Push user input immediately
-    setMessages((prev) => [...prev, `You: ${input}`]);
-
-    // Simulate bot reply with delay (after a short timeout)
-    setInput("");
-
-    setTimeout(() => {
-      // Add bot's reply after a delay
-      setMessages((prev) => [...prev, `Bot: Bow Wow!🦴`]);
-    }, 1000); // Delay of 1.0 seconds
+  const handleSend = async () => {
+    if (newMessage.trim() !== "") {
+      console.log("Sending message: ", newMessage);
+      const conversation = await MessageService.instance.sendMessage(
+        myEmail,
+        user.email,
+        newMessage
+      );
+      if (conversation) {
+        setConversation(conversation);
+      } else {
+        console.error("Failed to send message.");
+      }
+      setNewMessage("");
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -54,26 +83,29 @@ const Conversation = () => {
         </div>
       </div>
 
+      {/* Conversation history */}
       <div className="messages-container">
-        {messages.map((msg, index) => (
+        {conversation?.messages?.map((msg, index) => (
           <div
             key={index}
             className={`message-bubble ${
-              msg.startsWith("You:") ? "sent" : "received"
+              msg.senderEmail === myEmail ? "sent" : "received"
             }`}
           >
-            {msg.replace("You: ", "").replace("Bot: ", "")}
+            {msg.messageText}
           </div>
         ))}
       </div>
 
+      {/*add keyboard/messaging functionality here*/}
       <div className="message-input-container">
         <input
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
+          className="message-input"
           placeholder="Type a message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
         />
         <button onClick={handleSend}>
           <LuArrowUp className="send-arrow" />
@@ -83,4 +115,4 @@ const Conversation = () => {
   );
 };
 
-export default Conversation;
+export default ConversationPage;

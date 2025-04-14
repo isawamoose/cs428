@@ -6,6 +6,7 @@ import { db } from "./database/Database";
 import matchRouter from "./routes/MatchRouter";
 import authRouter from "./routes/AuthRouter";
 import profileRouter from "./routes/ProfileRouter";
+import messageRouter from "./routes/MesssageRouter";
 
 declare global {
   namespace Express {
@@ -67,6 +68,9 @@ secureApiRouter.use(profileRouter);
 
 // Match routes
 secureApiRouter.use(matchRouter);
+
+// Message routes
+secureApiRouter.use(messageRouter);
 
 // Return default message if the path is unknown
 app.use((_req, res) => {

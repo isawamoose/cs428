@@ -1,5 +1,7 @@
 import { Profile, ProfileObject } from "@shared/Profile";
 import { ApiRequest } from "./Request";
+import { Conversation } from "@shared/Conversation";
+import { Message } from "@shared/Message";
 
 class ApiClient {
   private apiRequest: ApiRequest = new ApiRequest();
@@ -71,19 +73,45 @@ class ApiClient {
   }
 
   async uploadPhoto(file: File, key: string): Promise<string> {
-
     interface Response {
-      url: string
+      url: string;
     }
 
-    const body = await file.arrayBuffer()
+    const body = await file.arrayBuffer();
     const headers = new Headers({
       "Content-type": file.type,
-      "X-User-Email": key
-    })
-    console.log(headers)
-    const response = (await this.apiRequest.request("photo", "POST", body, headers) as Response)
-    return response.url
+      "X-User-Email": key,
+    });
+    console.log(headers);
+    const response = (await this.apiRequest.request(
+      "photo",
+      "POST",
+      body,
+      headers
+    )) as Response;
+    return response.url;
+  }
+
+  async sendMessage(message: Message): Promise<Conversation> {
+    const body = {
+      message,
+    };
+    const conversationObject = await this.apiRequest.request(
+      "message",
+      "POST",
+      body
+    );
+    const conversation = Conversation.fromJson(conversationObject);
+    return conversation;
+  }
+
+  async getConversation(matchEmail: string): Promise<Conversation> {
+    const conversationObject = await this.apiRequest.request(
+      "conversation?matchEmail=" + matchEmail,
+      "GET"
+    );
+    const conversation = Conversation.fromJson(conversationObject);
+    return conversation;
   }
 }
 
