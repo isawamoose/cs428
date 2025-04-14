@@ -34,10 +34,10 @@ export class Message {
 
   static fromJson(json: any): Message {
     return new Message(
-      json.senderEmail,
-      json.recipientEmail,
-      json.messageText,
-      json.timestamp
+      json._senderEmail,
+      json._recipientEmail,
+      json._messageText,
+      json._timestamp
     );
   }
 }

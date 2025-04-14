@@ -356,7 +356,7 @@ class Database {
         message.recipientEmail,
         convoId,
         message.messageText,
-        message.timestamp ?? new Date(),
+        message.timestamp,
         true,
       ]
     );

@@ -59,7 +59,7 @@ export const tableCreateStatements = [
     recipientEmail VARCHAR(255) NOT NULL,
     conversationId INT NOT NULL,
     messageText TEXT NOT NULL,
-    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    timestamp VARCHAR(28) NOT NULL,
     isRead BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (senderEmail) REFERENCES user(email),
     FOREIGN KEY (conversationId) references conversation(id),

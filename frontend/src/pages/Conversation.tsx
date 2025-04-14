@@ -123,30 +123,6 @@ const ConversationPage = () => {
         <button onClick={handleSend}>
           <LuArrowUp className="send-arrow" />
         </button>
-        {/* <div className="messages-container">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message-bubble ${
-              msg.startsWith("You:") ? "sent" : "received"
-            }`}
-          >
-            {msg.replace("You: ", "").replace("Bot: ", "")}
-          </div>
-        ))}
-      </div>
-
-      <div className="message-input-container">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
-          placeholder="Type a message..."
-        />
-        <button onClick={handleSend}>
-          <LuArrowUp className="send-arrow" />
-        </button> */}
       </div>
     </div>
   );
