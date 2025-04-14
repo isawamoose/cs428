@@ -47,16 +47,18 @@ const Matches = () => {
                 </div>
               </div>
 
-              {/* Message icon OUTSIDE the clickable card */}
-              <LuMessageCircle
-                className="message-icon"
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent card click
-                  navigate(`/app/matches/conversation/${user.email}`, {
-                    state: { user },
-                  });
-                }}
-              />
+              {/* New wrapper for consistent sizing */}
+              <div className="message-icon-wrapper">
+                <LuMessageCircle
+                  className="message-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/app/matches/conversation/${user.email}`, {
+                      state: { user },
+                    });
+                  }}
+                />
+              </div>
             </div>
           ))
         ) : (
